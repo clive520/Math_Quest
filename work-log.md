@@ -15,6 +15,45 @@
 
 ## 2026-05-15
 
+### 建立 Vercel 部署用 Next.js 骨架
+
+變更類型：前端專案初始化與部署準備
+
+變更摘要：
+
+- 新增最小 Next.js App Router 專案骨架。
+- 建立 Math Quest 首頁，作為 Vercel 初次部署的可建置頁面。
+- 新增 `package.json`、`package-lock.json`、`next.config.ts`、`tsconfig.json`、`next-env.d.ts`、`.gitignore`。
+- 新增 `app/layout.tsx`、`app/page.tsx`、`app/globals.css`。
+- 將 Next.js 更新到 `16.2.6`。
+- 使用 npm `overrides` 將 PostCSS 固定到 `8.5.14`，使 `npm audit` 檢查為 0 個漏洞。
+- 因 Google Drive 同步資料夾不適合大量寫入 `node_modules`，改在 Windows 暫存資料夾執行 build 驗證。
+- 已通過 `npm ci` 與 `npm run build`。
+
+變更原因：
+
+- Vercel 需要一個可部署的網站專案，而目前 repository 原本只有規劃文件。
+- 先建立最小可建置版本，方便後續完成 Vercel 與 GitHub 的自動部署串接。
+
+影響檔案：
+
+- `.gitignore`
+- `package.json`
+- `package-lock.json`
+- `next.config.ts`
+- `tsconfig.json`
+- `next-env.d.ts`
+- `app/layout.tsx`
+- `app/page.tsx`
+- `app/globals.css`
+- `work-log.md`
+
+後續待辦：
+
+- 將本次 Next.js 骨架推送到 GitHub。
+- 在 Vercel 匯入 `clive520/Math_Quest` repository。
+- 確認 Vercel build 成功並取得部署網址。
+
 ### 建立 GitHub Repository 與首次推送
 
 變更類型：版本控制與部署準備

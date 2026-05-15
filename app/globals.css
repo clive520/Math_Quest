@@ -1,0 +1,111 @@
+:root {
+  color-scheme: light;
+  --ink: #1f2937;
+  --muted: #5f6c7b;
+  --line: #d9e1e8;
+  --paper: #f7fafc;
+  --surface: #ffffff;
+  --accent: #0f766e;
+  --accent-strong: #0b5f59;
+  --gold: #d99a1e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    linear-gradient(180deg, rgba(15, 118, 110, 0.08), transparent 260px),
+    var(--paper);
+  color: var(--ink);
+  font-family:
+    Arial,
+    "Microsoft JhengHei",
+    sans-serif;
+}
+
+.shell {
+  display: grid;
+  gap: 28px;
+  margin: 0 auto;
+  max-width: 960px;
+  min-height: 100vh;
+  padding: 72px 24px;
+}
+
+.intro {
+  align-self: end;
+}
+
+.eyebrow {
+  color: var(--accent-strong);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 14px;
+}
+
+h1 {
+  font-size: clamp(38px, 8vw, 72px);
+  line-height: 1.08;
+  letter-spacing: 0;
+  margin: 0;
+  max-width: 760px;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.8;
+  margin: 24px 0 0;
+  max-width: 720px;
+}
+
+.panel {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.item {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 14px;
+  min-height: 76px;
+  padding: 18px;
+}
+
+.item span {
+  background: var(--gold);
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 12px;
+  width: 12px;
+}
+
+.item p {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding: 48px 18px;
+  }
+
+  .panel {
+    grid-template-columns: 1fr;
+  }
+}
