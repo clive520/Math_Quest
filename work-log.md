@@ -39,9 +39,37 @@
 
 後續待辦：
 
-- 推送本次部署設定文件更新到 GitHub。
-- 確認 Vercel 自動部署是否成功。
+- 完成 Vercel 自動部署確認。
 - 記錄正式網站網址。
+
+### 完成 Vercel 首次正式部署
+
+變更類型：正式部署
+
+變更摘要：
+
+- 推送 GitHub commit 後，Vercel 自動建立 Production Deployment。
+- 確認部署狀態為 Ready。
+- 正式網站網址為 `https://math-quest-clive520s-projects.vercel.app`。
+- 使用 `vercel curl` 驗證部署內容，確認首頁包含「數學闖關網站正在準備中」。
+- 發現 Vercel 預設啟用 SSO Deployment Protection，外部直接開啟網址會要求 Vercel 驗證。
+- 關閉 Vercel SSO Deployment Protection，讓正式網址可以公開瀏覽。
+- 使用一般 HTTP 請求確認正式網址回傳 200，且頁面內容正確。
+- 更新 `deployment-process.md`，補上正式網站網址與目前保護設定。
+
+變更原因：
+
+- 使用者希望完成 Vercel 部署步驟，並建立可由 GitHub push 自動部署的流程。
+- 網站未來需要讓老師與學生直接瀏覽，因此正式網址不能要求 Vercel 帳號驗證。
+
+影響檔案：
+
+- `deployment-process.md`
+- `work-log.md`
+
+後續待辦：
+
+- 後續新增 Supabase 前，先建立 Supabase 專案與環境變數管理流程。
 
 ### 建立 Vercel 部署用 Next.js 骨架
 

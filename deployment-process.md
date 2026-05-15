@@ -18,6 +18,12 @@ Vercel project：
 clive520s-projects/math-quest
 ```
 
+正式網站網址：
+
+```text
+https://math-quest-clive520s-projects.vercel.app
+```
+
 基本流程：
 
 ```text
@@ -256,4 +262,16 @@ https://github.com/clive520/Math_Quest
 
 ```text
 clive520s-projects/math-quest
+```
+
+目前正式網站網址：
+
+```text
+https://math-quest-clive520s-projects.vercel.app
+```
+
+目前 Vercel Deployment Protection：
+
+```text
+SSO protection 已關閉，正式網址可公開瀏覽。
 ```
