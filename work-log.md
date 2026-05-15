@@ -15,6 +15,100 @@
 
 ## 2026-05-15
 
+### 新增老師忘記密碼與重設密碼流程
+
+變更類型：Auth 功能開發
+
+變更摘要：
+
+- 在老師登入頁新增「忘記密碼？」連結。
+- 新增忘記密碼頁：`app/forgot-password/page.tsx`。
+- 新增忘記密碼 Server Action：`app/forgot-password/actions.ts`，透過 Supabase `resetPasswordForEmail` 寄出重設密碼信。
+- 新增 Auth callback route：`app/auth/callback/route.ts`，處理 Supabase Email 驗證與密碼重設連結，並依 `next` 參數導回指定頁面。
+- 新增重設密碼頁：`app/reset-password/page.tsx`。
+- 新增重設密碼 Server Action：`app/reset-password/actions.ts`，登入 recovery session 後可更新新密碼，完成後登出並回登入頁。
+- 註冊流程加入 `emailRedirectTo`，讓老師點擊註冊驗證信後可導回 `/auth/callback?next=/dashboard`。
+- 更新 `app/globals.css`，新增登入表單底部連結樣式。
+- 更新 `supabase-setup.md`，記錄 Supabase Auth redirect URL 設定注意事項。
+- 依照本機 build 流程，複製專案到 Windows 暫存目錄後執行 `npm ci` 與 `npm run build`，建置成功。
+
+變更原因：
+
+- 使用者忘記老師帳號密碼時，前台需要提供自助式重設密碼流程。
+- Supabase Auth 的 Email 驗證與密碼重設連結需要 callback route 才能建立 session 並導回正確頁面。
+
+影響檔案：
+
+- `app/login/page.tsx`
+- `app/login/actions.ts`
+- `app/auth/callback/route.ts`
+- `app/forgot-password/page.tsx`
+- `app/forgot-password/actions.ts`
+- `app/reset-password/page.tsx`
+- `app/reset-password/actions.ts`
+- `app/globals.css`
+- `supabase-setup.md`
+- `work-log.md`
+
+後續待辦：
+
+- 部署後在 Supabase Auth URL Configuration 確認正式網站 `/auth/callback` 已列入允許的 redirect URL。
+- 等 Supabase Email rate limit 解除後，實際寄送一封重設密碼信並完成端到端測試。
+
+### 補充 Google 雲端硬碟與本機 Build 部署流程
+
+變更類型：部署流程文件
+
+變更摘要：
+
+- 更新 `deployment-process.md`，將部署前流程調整為先在 Google 雲端硬碟工作區修改，再複製到本機 build 目錄驗證。
+- 新增「本機 Build 驗證流程」章節，記錄如何建立本機 build 目錄、複製必要檔案、排除 `node_modules`、`.next`、`.vercel`、`.env.local` 與 `.git`。
+- 明確規定部署前應在本機 build 目錄執行 `npm ci` 與 `npm run build`。
+- 新增 Google 雲端硬碟中的 `node_modules` 異常處理方式，避免把雲端同步造成的依賴損壞誤判為程式錯誤。
+- 更新標準部署檢查清單與目前採用流程。
+
+變更原因：
+
+- Google 雲端硬碟同步大量小檔案速度較慢，且可能造成 `node_modules` 內套件檔案異常。
+- Math Quest 的穩定流程應以雲端硬碟保存原始碼，但以本機 build 目錄作為乾淨、快速、可信的建置驗證環境。
+
+影響檔案：
+
+- `deployment-process.md`
+- `work-log.md`
+
+後續待辦：
+
+- 未來可新增自動化 script，一鍵複製必要檔案到本機 build 目錄並執行 `npm ci`、`npm run build`。
+
+### 改善老師註冊錯誤訊息並新增網站圖示
+
+變更類型：錯誤處理與介面細節
+
+變更摘要：
+
+- 測試正式網站老師註冊時，確認 Supabase 回傳 `over_email_send_rate_limit`，代表驗證信寄送頻率超過限制。
+- 更新 `app/login/actions.ts`，將 Supabase 註冊錯誤碼轉成較清楚的中文提示。
+- 針對 Email 寄送頻率限制，顯示「驗證信寄送太頻繁，請稍候幾分鐘再註冊」。
+- 針對已註冊 Email 與密碼強度不足，加入較明確的提示訊息。
+- 新增 `app/icon.svg` 作為 Next.js 網站圖示，避免瀏覽器請求 `/favicon.ico` 時出現 404。
+
+變更原因：
+
+- 原本註冊失敗時只顯示「註冊失敗，請稍後再試」，無法判斷是系統故障、Email 已註冊，還是 Supabase 寄信頻率限制。
+- 瀏覽器 console 出現 favicon 404，雖不影響功能，但應補上網站圖示讓正式站更完整。
+
+影響檔案：
+
+- `app/login/actions.ts`
+- `app/icon.svg`
+- `work-log.md`
+
+後續待辦：
+
+- 部署後再次測試註冊頁，確認錯誤提示與網站圖示已更新。
+- 若開發測試時常碰到寄信限制，可評估在 Supabase 暫時關閉 Email confirmation 或調整 Auth 郵件設定。
+
 ### 建立老師登入與班級管理第一版
 
 變更類型：功能開發與資料庫結構

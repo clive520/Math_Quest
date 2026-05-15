@@ -66,6 +66,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <input name="password" type="password" required />
             </label>
             <button type="submit">登入老師工作台</button>
+            <div className="form-footer">
+              <Link className="text-link" href="/forgot-password">
+                忘記密碼？
+              </Link>
+            </div>
           </form>
         )}
       </section>

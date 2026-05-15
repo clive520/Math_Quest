@@ -130,3 +130,30 @@ supabase/migrations/20260515043000_add_teacher_profile_trigger.sql
 - `.env.local`、資料庫密碼、secret key、service role key 都不可提交。
 - 老師只能讀寫自己擁有的班級、學生、派題與私人題目。
 - 公開題庫只公開題目內容，不公開學生資料或作答紀錄。
+
+## 八、Auth 連結與密碼重設
+
+老師註冊 Email 驗證與忘記密碼功能會透過 Supabase Auth Email 發送連結，並導回網站：
+
+```text
+/auth/callback
+```
+
+目前程式使用：
+
+- 註冊驗證：`/auth/callback?next=/dashboard`
+- 忘記密碼：`/auth/callback?next=/reset-password`
+
+Supabase Dashboard 的 Auth URL 設定應允許正式網站網址作為 Site URL，並允許以下 redirect URL：
+
+```text
+https://math-quest-clive520s-projects.vercel.app/auth/callback
+```
+
+若本機開發需要測試，也可加入：
+
+```text
+http://localhost:3000/auth/callback
+```
+
+若 redirect URL 未列入允許清單，使用者點擊驗證信或重設密碼信後可能無法正確回到 Math Quest。
