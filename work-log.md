@@ -15,6 +15,38 @@
 
 ## 2026-05-15
 
+### 修正 Supabase Auth 信件導回 localhost 問題
+
+變更類型：Auth 設定與部署修正
+
+變更摘要：
+
+- 發現 Supabase 註冊確認信與重設密碼信中的 `redirect_to` 仍指向 `http://localhost:3000`。
+- 新增環境變數範本：`NEXT_PUBLIC_SITE_URL`。
+- 更新 `app/login/actions.ts` 與 `app/forgot-password/actions.ts`，優先使用 `NEXT_PUBLIC_SITE_URL` 產生 Email redirect URL，並將 fallback 改為正式網站網址。
+- 使用 Vercel CLI 設定 `NEXT_PUBLIC_SITE_URL=https://math-quest-clive520s-projects.vercel.app` 到 Production 與 Development。
+- 在 Supabase Auth URL Configuration 將 Site URL 從 `http://localhost:3000` 改為正式網站網址。
+- 在 Supabase Auth Redirect URLs 加入：
+  - `https://math-quest-clive520s-projects.vercel.app/auth/callback`
+  - `https://math-quest-clive520s-projects.vercel.app/auth/callback**`
+- 更新 `supabase-setup.md`，記錄 redirect URL wildcard 設定與排查方式。
+
+變更原因：
+
+- Supabase 若 Site URL 仍是 localhost，或指定的 redirect URL 未列入允許清單，會讓註冊確認信與重設密碼信導回本機網址，正式使用者無法完成驗證或改密碼。
+
+影響檔案：
+
+- `.env.example`
+- `app/login/actions.ts`
+- `app/forgot-password/actions.ts`
+- `supabase-setup.md`
+- `work-log.md`
+
+後續待辦：
+
+- 部署後重新寄送一封註冊確認信或重設密碼信，確認信件連結中的 `redirect_to` 已改為正式網站 `/auth/callback`。
+
 ### 部署老師密碼重設流程到正式網站
 
 變更類型：正式部署

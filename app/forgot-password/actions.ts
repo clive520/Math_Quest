@@ -10,8 +10,12 @@ function getFormValue(formData: FormData, key: string) {
 }
 
 async function getSiteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  }
+
   const headerStore = await headers();
-  return headerStore.get("origin") ?? "http://localhost:3000";
+  return headerStore.get("origin") ?? "https://math-quest-clive520s-projects.vercel.app";
 }
 
 export async function sendPasswordResetEmail(formData: FormData) {

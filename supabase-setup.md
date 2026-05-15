@@ -16,6 +16,7 @@
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SITE_URL
 ```
 
 目前 Supabase project：
@@ -66,6 +67,7 @@ Status: ACTIVE_HEALTHY
 ```text
 NEXT_PUBLIC_SUPABASE_URL=你的 Supabase Project URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=你的 Supabase Publishable Key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 注意：
@@ -81,6 +83,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=你的 Supabase Publishable Key
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SITE_URL
 ```
 
 設定後需要重新部署，Vercel 才會讀取新的環境變數。
@@ -90,6 +93,12 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 - Production：已設定。
 - Development：已設定。
 - Preview：尚未設定，等需要 Pull Request 或分支預覽時再補。
+
+正式網站的 `NEXT_PUBLIC_SITE_URL` 應設定為：
+
+```text
+https://math-quest-clive520s-projects.vercel.app
+```
 
 ## 六、後續資料庫規劃
 
@@ -148,6 +157,7 @@ Supabase Dashboard 的 Auth URL 設定應允許正式網站網址作為 Site URL
 
 ```text
 https://math-quest-clive520s-projects.vercel.app/auth/callback
+https://math-quest-clive520s-projects.vercel.app/auth/callback**
 ```
 
 若本機開發需要測試，也可加入：
@@ -157,3 +167,9 @@ http://localhost:3000/auth/callback
 ```
 
 若 redirect URL 未列入允許清單，使用者點擊驗證信或重設密碼信後可能無法正確回到 Math Quest。
+
+若信件中的 `redirect_to` 仍出現 `http://localhost:3000`，優先檢查：
+
+1. Supabase Auth 的 Site URL 是否仍設定為 `http://localhost:3000`。
+2. Supabase Auth 的 Redirect URLs 是否包含正式網站 `/auth/callback` 與 `/auth/callback**`。
+3. Vercel 是否已設定 `NEXT_PUBLIC_SITE_URL=https://math-quest-clive520s-projects.vercel.app` 並重新部署。
