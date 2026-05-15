@@ -15,6 +15,47 @@
 
 ## 2026-05-15
 
+### 建立 Supabase 基礎串接
+
+變更類型：Supabase 整合準備
+
+變更摘要：
+
+- 安裝 Supabase 相關套件到 lock file：`@supabase/supabase-js`、`@supabase/ssr`。
+- 新增 `.env.example`，記錄需要的 Supabase 環境變數。
+- 新增 `lib/supabase/client.ts`，供瀏覽器端 Client Component 使用。
+- 新增 `lib/supabase/server.ts`，供 Server Component、Server Action、Route Handler 使用。
+- 新增 `lib/supabase/proxy.ts` 與根目錄 `proxy.ts`，用於更新 Supabase Auth cookie session。
+- 更新 `tsconfig.json`，加入 `@/*` path alias。
+- 新增 `supabase-setup.md`，記錄 Supabase 專案建立、環境變數與安全原則。
+- 更新 `deployment-process.md`，改用目前 Supabase 建議的 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`。
+
+變更原因：
+
+- 下一階段需要開始串接 Supabase，作為老師登入、班級資料、學生資料、題庫與作答紀錄的基礎。
+- 先建立安全的環境變數範本與 Supabase client 工具，避免日後把密鑰提交到 GitHub。
+
+影響檔案：
+
+- `.env.example`
+- `package.json`
+- `package-lock.json`
+- `tsconfig.json`
+- `lib/supabase/client.ts`
+- `lib/supabase/server.ts`
+- `lib/supabase/proxy.ts`
+- `proxy.ts`
+- `supabase-setup.md`
+- `deployment-process.md`
+- `work-log.md`
+
+後續待辦：
+
+- 建立 Supabase 雲端專案。
+- 取得 Supabase Project URL 與 Publishable Key。
+- 將環境變數加入本機 `.env.local` 與 Vercel Project。
+- 建立第一批資料庫 migration。
+
 ### 建立 Vercel Project 並連接 GitHub
 
 變更類型：部署設定

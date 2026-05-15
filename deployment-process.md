@@ -157,14 +157,14 @@ Vercel 需要設定與 Supabase 相關的環境變數，例如：
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 ```
 
 注意：
 
 - `NEXT_PUBLIC_` 開頭的變數可被前端使用。
-- `SUPABASE_SERVICE_ROLE_KEY` 權限很高，不能放到前端程式碼中。
+- Supabase 舊版 `anon` key 與 `service_role` key 在 2026 年底前仍可使用，但目前新專案優先使用 publishable key。
+- `service_role` 或 secret key 權限很高，不能放到前端程式碼中。
 - 不要把 `.env.local` 或任何密鑰提交到 GitHub。
 
 ### 資料庫變更
