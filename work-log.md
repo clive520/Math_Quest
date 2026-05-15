@@ -56,6 +56,29 @@
 - 將環境變數加入本機 `.env.local` 與 Vercel Project。
 - 建立第一批資料庫 migration。
 
+### 修正未設定 Supabase 環境變數時的部署錯誤
+
+變更類型：錯誤修正
+
+變更摘要：
+
+- 發現加入 Supabase proxy 後，Vercel 正式部署雖然 build 成功，但因尚未設定 Supabase 環境變數，正式網址回傳 500。
+- 更新 `lib/supabase/proxy.ts`，當 `NEXT_PUBLIC_SUPABASE_URL` 或 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` 尚未設定時，先略過 Supabase session refresh。
+
+變更原因：
+
+- 目前還沒建立 Supabase 雲端專案，Vercel 尚無 Supabase 環境變數。
+- 網站應該在 Supabase 尚未完成設定前仍可正常顯示首頁，避免部署管線中斷。
+
+影響檔案：
+
+- `lib/supabase/proxy.ts`
+- `work-log.md`
+
+後續待辦：
+
+- 建立 Supabase 雲端專案後，將環境變數加入 Vercel，再啟用完整 Auth session refresh。
+
 ### 建立 Vercel Project 並連接 GitHub
 
 變更類型：部署設定
