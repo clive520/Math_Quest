@@ -26,7 +26,9 @@
 - 確認 GitHub 帳號為 `clive520`。
 - 決定建立公開 repository：`clive520/Math_Quest`。
 - 在 `deployment-process.md` 補上 GitHub repository 連結。
-- 準備將目前專案文件進行第一次 Git commit 並推送到 GitHub。
+- 完成第一次 Git commit：`Initial project documentation`。
+- 建立公開 GitHub repository：`https://github.com/clive520/Math_Quest`。
+- 將目前專案文件推送到 GitHub `main` 分支。
 
 變更原因：
 
@@ -40,9 +42,6 @@
 
 後續待辦：
 
-- 完成首次 commit。
-- 建立 GitHub repository。
-- 將目前檔案推送到 GitHub。
 - 後續再進行 Vercel 串接與自動部署設定。
 
 ### 建立部署流程文件
