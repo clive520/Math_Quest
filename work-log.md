@@ -15,6 +15,82 @@
 
 ## 2026-05-15
 
+### 建立老師登入與班級管理第一版
+
+變更類型：功能開發與資料庫結構
+
+變更摘要：
+
+- 新增 migration：`supabase/migrations/20260515043000_add_teacher_profile_trigger.sql`。
+- 新增 `auth.users` trigger，自動在老師註冊後建立 `teachers` profile。
+- 將第一批 migration 套用到 Supabase 遠端資料庫。
+- 新增老師登入 / 註冊頁：`app/login/page.tsx` 與 `app/login/actions.ts`。
+- 新增老師 dashboard auth guard：`app/dashboard/layout.tsx`。
+- 新增老師首頁：`app/dashboard/page.tsx`。
+- 新增班級管理頁與 Server Actions：`app/dashboard/classes/page.tsx`、`app/dashboard/classes/actions.ts`。
+- 班級代碼由 server action 產生 6 碼大寫英數，避開容易混淆字元。
+- 首頁新增進入老師工作台的連結。
+- 擴充 `app/globals.css`，支援登入頁、老師後台、班級列表與表單樣式。
+
+變更原因：
+
+- 依照目前 MVP 順序，先完成老師登入與班級管理，讓後續學生管理、題目管理與派題功能有可用的老師端基礎。
+- 老師 profile 改由資料庫 trigger 建立，避免註冊流程中因網路或前端中斷造成 Auth 使用者與 `teachers` 資料不同步。
+
+影響檔案：
+
+- `app/page.tsx`
+- `app/globals.css`
+- `app/login/actions.ts`
+- `app/login/page.tsx`
+- `app/dashboard/layout.tsx`
+- `app/dashboard/page.tsx`
+- `app/dashboard/classes/actions.ts`
+- `app/dashboard/classes/page.tsx`
+- `supabase/migrations/20260515043000_add_teacher_profile_trigger.sql`
+- `work-log.md`
+
+後續待辦：
+
+- 實作學生管理 CRUD。
+- 實作題目模板建立介面。
+- 實作任務指派流程。
+
+### 建立第一批 Supabase Migration
+
+變更類型：資料庫結構
+
+變更摘要：
+
+- 建立 migration：`supabase/migrations/20260515021520_initial_core_schema.sql`。
+- 新增 enum：`question_visibility`、`question_type`、`assignment_status`、`assignment_attempt_status`。
+- 新增資料表：`teachers`、`classes`、`students`、`question_templates`、`assignments`、`assignment_attempts`、`assignment_questions`、`student_attempts`、`student_progress`。
+- `assignment_attempts` 用來記錄學生一次完整闖關，`student_attempts` 用來記錄該次闖關中的單題明細。
+- `student_attempts` 加入 `(assignment_attempt_id, question_template_id)` 唯一限制，避免同一次闖關重複產生同一題。
+- 新增 `updated_at` trigger function 與各主要資料表 trigger。
+- 新增常用查詢 index。
+- 啟用 Row Level Security。
+- 加入第一版老師端 RLS policy：老師只能管理自己的班級、學生、派題與私人題目。
+- 加入公開題庫讀取 policy：已登入老師可讀取公開題目。
+- 更新 `supabase-setup.md`，記錄第一批資料庫結構。
+
+變更原因：
+
+- Math Quest 需要先建立穩定的資料庫基礎，才能開始開發老師註冊、班級管理、學生管理、題庫、派題與作答紀錄功能。
+- 所有資料庫結構需透過 migration 檔案版本控制，方便未來追蹤與部署。
+
+影響檔案：
+
+- `supabase/migrations/20260515021520_initial_core_schema.sql`
+- `supabase-setup.md`
+- `work-log.md`
+
+後續待辦：
+
+- 將 migration 套用到 Supabase 雲端資料庫。
+- 確認遠端資料表建立成功。
+- 後續實作學生登入 session 與 server-side 作答 API。
+
 ### 建立 Supabase 雲端專案並設定 Vercel 環境變數
 
 變更類型：Supabase 雲端設定與部署設定

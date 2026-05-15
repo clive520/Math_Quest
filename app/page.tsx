@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const milestones = [
   "多位老師註冊與班級管理",
   "動態數字題目與老師派題",
@@ -15,6 +17,11 @@ export default function Home() {
           這裡將會成為國小老師建立班級、設計動態題目、派發闖關任務，
           並與其他老師共享題庫的數學學習平台。
         </p>
+        <div className="hero-actions">
+          <Link className="primary-link" href="/login">
+            進入老師工作台
+          </Link>
+        </div>
       </section>
 
       <section className="panel" aria-label="目前規劃重點">

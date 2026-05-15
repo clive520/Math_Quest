@@ -93,18 +93,36 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 ## 六、後續資料庫規劃
 
-後續會建立 Supabase migration，逐步加入：
+已建立第一批 Supabase migration：
+
+```text
+supabase/migrations/20260515021520_initial_core_schema.sql
+supabase/migrations/20260515043000_add_teacher_profile_trigger.sql
+```
+
+第一批資料表：
 
 - teachers
 - classes
 - students
 - question_templates
 - assignments
+- assignment_attempts
 - assignment_questions
 - student_attempts
 - student_progress
 
-所有涉及不同老師資料隔離的資料表，都需要啟用 Row Level Security。
+已加入：
+
+- `updated_at` trigger。
+- 常用查詢 index。
+- `assignment_attempts` 作為學生一次闖關挑戰的主紀錄，`student_attempts` 作為單題作答明細。
+- `student_attempts` 已加入 `(assignment_attempt_id, question_template_id)` 唯一限制，避免同一次闖關重複產生同一題。
+- 老師註冊後，`auth.users` trigger 會自動建立 `teachers` profile。
+- Row Level Security。
+- 老師只能管理自己的班級、學生、派題與私人題目。
+- 老師可以讀取公開題目。
+- 學生端第一版預計透過 Next.js Server Action / API 驗證學生 session 後寫入作答資料，不直接使用 Supabase Auth。
 
 ## 七、安全原則
 
