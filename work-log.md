@@ -15,6 +15,30 @@
 
 ## 2026-05-15
 
+### 管理員重設老師帳號密碼
+
+變更類型：帳號維護
+
+變更摘要：
+
+- 透過 Supabase SQL Editor 更新老師帳號 `clive520@lyps.tc.edu.tw` 的 Auth 密碼雜湊。
+- 確認更新對象 UID 為 `316bab73-2240-41bf-b005-8bddac1a26f1`。
+- 使用正式網站登入流程測試，確認新密碼可登入並導向 `/dashboard`。
+
+變更原因：
+
+- Supabase 內建寄信服務目前受 2 emails/hour 限制影響，重設密碼信暫時無法寄出。
+- 使用者需要先恢復老師帳號登入能力。
+
+影響檔案：
+
+- `work-log.md`
+
+後續待辦：
+
+- 使用者登入後應改成自己記得的密碼。
+- 後續可設定 custom SMTP，避免重設密碼信受 Supabase 內建寄信服務低額度限制。
+
 ### 修正 Supabase Auth 信件導回 localhost 問題
 
 變更類型：Auth 設定與部署修正
