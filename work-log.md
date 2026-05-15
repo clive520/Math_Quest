@@ -15,6 +15,34 @@
 
 ## 2026-05-15
 
+### 建立 Vercel Project 並連接 GitHub
+
+變更類型：部署設定
+
+變更摘要：
+
+- 使用 Vercel CLI 登入帳號 `clive520`。
+- 建立並連接 Vercel project：`clive520s-projects/math-quest`。
+- 將 Vercel project 連接到 GitHub repository：`https://github.com/clive520/Math_Quest`。
+- 更新 `deployment-process.md`，補上目前 Vercel project 資訊。
+- Vercel CLI 自動將 `.vercel` 加入 `.gitignore`，避免本機 Vercel 設定被提交到 GitHub。
+
+變更原因：
+
+- 使用者希望完成 Vercel 部署步驟，讓 GitHub push 後可以由 Vercel 進行自動部署。
+
+影響檔案：
+
+- `.gitignore`
+- `deployment-process.md`
+- `work-log.md`
+
+後續待辦：
+
+- 推送本次部署設定文件更新到 GitHub。
+- 確認 Vercel 自動部署是否成功。
+- 記錄正式網站網址。
+
 ### 建立 Vercel 部署用 Next.js 骨架
 
 變更類型：前端專案初始化與部署準備

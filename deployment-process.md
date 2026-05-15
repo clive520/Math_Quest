@@ -12,6 +12,12 @@ GitHub repository：
 https://github.com/clive520/Math_Quest
 ```
 
+Vercel project：
+
+```text
+clive520s-projects/math-quest
+```
+
 基本流程：
 
 ```text
@@ -244,4 +250,10 @@ git push
 
 ```text
 https://github.com/clive520/Math_Quest
+```
+
+目前 Vercel project：
+
+```text
+clive520s-projects/math-quest
 ```
