@@ -15,6 +15,41 @@
 
 ## 2026-05-15
 
+### 建立 Supabase 雲端專案並設定 Vercel 環境變數
+
+變更類型：Supabase 雲端設定與部署設定
+
+變更摘要：
+
+- 完成 Supabase CLI 登入。
+- 建立 Supabase project：`Math Quest`。
+- Supabase project ref：`loewbggrxtyvdcgtkmzo`。
+- Supabase region：`ap-northeast-1`。
+- Supabase project URL：`https://loewbggrxtyvdcgtkmzo.supabase.co`。
+- 確認 Supabase project 狀態為 `ACTIVE_HEALTHY`。
+- 將 `NEXT_PUBLIC_SUPABASE_URL` 設定到 Vercel Production 與 Development。
+- 將 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` 設定到 Vercel Production 與 Development。
+- 將 `supabase/.temp` 加入 `.gitignore`，避免提交 Supabase CLI 本機暫存資料。
+- 更新 `supabase-setup.md` 與 `deployment-process.md`，記錄 Supabase project 資訊。
+
+變更原因：
+
+- Math Quest 後續需要 Supabase 作為登入、資料庫、班級、學生、題庫與作答紀錄的基礎。
+- Vercel 正式部署需要 Supabase 環境變數，才能啟用 Supabase SSR/Auth 基礎設施。
+
+影響檔案：
+
+- `.gitignore`
+- `supabase-setup.md`
+- `deployment-process.md`
+- `work-log.md`
+
+後續待辦：
+
+- 推送文件更新並觸發 Vercel 重新部署。
+- 確認正式網站在 Supabase 環境變數設定後仍可正常開啟。
+- 之後建立第一批資料庫 migration。
+
 ### 建立 Supabase 基礎串接
 
 變更類型：Supabase 整合準備

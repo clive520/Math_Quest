@@ -18,6 +18,16 @@ NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 ```
 
+目前 Supabase project：
+
+```text
+Project name: Math Quest
+Project ref: loewbggrxtyvdcgtkmzo
+Region: ap-northeast-1
+Project URL: https://loewbggrxtyvdcgtkmzo.supabase.co
+Status: ACTIVE_HEALTHY
+```
+
 ## 二、已完成的程式設定
 
 已新增：
@@ -75,6 +85,12 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 設定後需要重新部署，Vercel 才會讀取新的環境變數。
 
+目前已設定：
+
+- Production：已設定。
+- Development：已設定。
+- Preview：尚未設定，等需要 Pull Request 或分支預覽時再補。
+
 ## 六、後續資料庫規劃
 
 後續會建立 Supabase migration，逐步加入：
@@ -96,4 +112,3 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 - `.env.local`、資料庫密碼、secret key、service role key 都不可提交。
 - 老師只能讀寫自己擁有的班級、學生、派題與私人題目。
 - 公開題庫只公開題目內容，不公開學生資料或作答紀錄。
-

@@ -270,6 +270,15 @@ clive520s-projects/math-quest
 https://math-quest-clive520s-projects.vercel.app
 ```
 
+目前 Supabase project：
+
+```text
+Project name: Math Quest
+Project ref: loewbggrxtyvdcgtkmzo
+Project URL: https://loewbggrxtyvdcgtkmzo.supabase.co
+Region: ap-northeast-1
+```
+
 目前 Vercel Deployment Protection：
 
 ```text
