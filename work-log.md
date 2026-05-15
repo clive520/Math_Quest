@@ -15,6 +15,35 @@
 
 ## 2026-05-15
 
+### 部署老師密碼重設流程到正式網站
+
+變更類型：正式部署
+
+變更摘要：
+
+- 建立 Git commit：`636d86b Add password reset flow`。
+- 推送 `main` 分支到 GitHub：`clive520/Math_Quest`。
+- Vercel 自動部署正式網站。
+- 驗證正式網站 `/forgot-password` 已從 404 更新為 200，並顯示「重設老師密碼」頁面內容。
+- 驗證正式網站 `/login` 已包含「忘記密碼？」連結。
+- 驗證正式網站 `/icon.svg` 回傳 200，網站圖示已部署。
+- 驗證正式網站 `/auth/callback` 路由存在，無 code 時會重新導向登入錯誤頁。
+
+變更原因：
+
+- 將老師忘記密碼、自助重設密碼、Auth callback、favicon 與部署流程文件更新正式發布到網站。
+
+影響檔案：
+
+- GitHub `main` 分支
+- Vercel Production Deployment
+- `work-log.md`
+
+後續待辦：
+
+- 到 Supabase Auth URL Configuration 確認正式網站 `/auth/callback` 已列入允許的 redirect URL。
+- 等 Supabase Email rate limit 解除後，實際寄送重設密碼信並完成端到端測試。
+
 ### 新增老師忘記密碼與重設密碼流程
 
 變更類型：Auth 功能開發
