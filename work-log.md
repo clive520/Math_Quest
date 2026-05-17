@@ -15,6 +15,40 @@
 
 ## 2026-05-15
 
+### 新增老師帳號設定頁
+
+變更類型：老師端帳號功能
+
+變更摘要：
+
+- 新增老師帳號設定頁：`app/dashboard/settings/page.tsx`。
+- 新增帳號設定 Server Actions：`app/dashboard/settings/actions.ts`。
+- 老師可在登入後查看目前登入 Email。
+- 老師可修改 `teachers.display_name`，並同步更新 Supabase Auth user metadata 的 `display_name`。
+- 老師可輸入目前密碼、新密碼與確認新密碼，在登入狀態下自行修改密碼。
+- 修改密碼前會先用目前 Email 與目前密碼重新驗證，避免只靠已登入 session 就能改密碼。
+- 老師工作台側邊欄新增「帳號設定」連結。
+- 新增 `.settings-grid` 樣式，讓基本資料與修改密碼表單在桌面並排、手機直排。
+- 依照本機 build 流程，複製專案到 Windows 暫存目錄後執行 `npm ci` 與 `npm run build`，建置成功。
+
+變更原因：
+
+- 使用者希望將「登入後老師可修改自己資料，包含修改密碼」列為優先項目。
+- 讓老師可以在不依賴 Supabase Email 重設信的情況下，自行更新密碼，降低內建寄信額度限制的影響。
+
+影響檔案：
+
+- `app/dashboard/layout.tsx`
+- `app/dashboard/settings/page.tsx`
+- `app/dashboard/settings/actions.ts`
+- `app/globals.css`
+- `work-log.md`
+
+後續待辦：
+
+- 部署到正式網站後，登入老師帳號確認側邊欄與帳號設定頁可正常使用。
+- 未來可加入帳號設定成功後的更細緻 UI 狀態，或新增修改 Email 流程。
+
 ### 管理員重設老師帳號密碼
 
 變更類型：帳號維護

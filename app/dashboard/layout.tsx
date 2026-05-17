@@ -39,6 +39,7 @@ export default async function DashboardLayout({
         <nav>
           <Link href="/dashboard">總覽</Link>
           <Link href="/dashboard/classes">班級</Link>
+          <Link href="/dashboard/settings">帳號設定</Link>
         </nav>
         <form action={signOut}>
           <button className="ghost-button" type="submit">
