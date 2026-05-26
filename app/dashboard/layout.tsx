@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -26,9 +27,20 @@ export default async function DashboardLayout({
 
   const { data: teacher } = await supabase
     .from("teachers")
-    .select("display_name")
+    .select("display_name, is_admin, must_change_password")
     .eq("id", user.id)
     .maybeSingle();
+
+  const headerStore = await headers();
+  const pathname = headerStore.get("x-pathname") ?? "";
+
+  if (teacher?.must_change_password && !pathname.startsWith("/dashboard/settings")) {
+    redirect(
+      `/dashboard/settings?error=${encodeURIComponent(
+        "你目前使用的是臨時密碼，請先修改密碼",
+      )}`,
+    );
+  }
 
   return (
     <div className="dashboard-shell">
@@ -39,6 +51,7 @@ export default async function DashboardLayout({
         <nav>
           <Link href="/dashboard">總覽</Link>
           <Link href="/dashboard/classes">班級</Link>
+          {teacher?.is_admin ? <Link href="/dashboard/admin/teachers">老師帳號</Link> : null}
           <Link href="/dashboard/settings">帳號設定</Link>
         </nav>
         <form action={signOut}>

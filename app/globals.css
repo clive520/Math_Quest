@@ -251,6 +251,15 @@ h1 {
   color: #047857;
 }
 
+.notice.warning {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.compact-notice {
+  margin: 12px 0 0;
+}
+
 .dashboard-shell {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
@@ -438,6 +447,85 @@ h1 {
   margin: 0 0 8px;
 }
 
+.teacher-account-list {
+  display: grid;
+  gap: 14px;
+}
+
+.teacher-account-row {
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(220px, 320px);
+  padding: 16px;
+}
+
+.teacher-account-main h3,
+.teacher-account-main p,
+.temporary-password-box p {
+  margin: 0;
+}
+
+.teacher-account-main {
+  display: grid;
+  gap: 6px;
+}
+
+.status-stack {
+  align-items: end;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-pill {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  color: #047857;
+  font-weight: 800;
+  padding: 6px 8px;
+}
+
+.status-pill.admin {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.status-pill.warning {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+
+.reset-panel {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.temporary-password-box {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  width: 100%;
+}
+
+.temporary-password-box strong {
+  background: #111827;
+  border-radius: 8px;
+  color: #ffffff;
+  display: inline-flex;
+  font-size: 18px;
+  letter-spacing: 0;
+  padding: 10px 12px;
+}
+
 @media (max-width: 720px) {
   .shell {
     padding: 48px 18px;
@@ -475,8 +563,14 @@ h1 {
   .workband,
   .section-heading,
   .class-row,
-  .class-actions {
+  .class-actions,
+  .teacher-account-row,
+  .status-stack {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .teacher-account-row {
+    grid-template-columns: 1fr;
   }
 }

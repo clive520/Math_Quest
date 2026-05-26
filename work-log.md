@@ -15,6 +15,51 @@
 
 ## 2026-05-15
 
+### 新增系統管理員重設老師臨時密碼功能
+
+變更類型：管理員功能與資料庫權限
+
+變更摘要：
+
+- 新增 migration：`supabase/migrations/20260526090000_add_teacher_admin_password_reset.sql`。
+- `teachers` 新增 `is_admin` 欄位，用來標記系統管理員。
+- `teachers` 新增 `must_change_password` 欄位，用來標記老師是否必須先修改臨時密碼。
+- 將 `clive520@lyps.tc.edu.tw` 對應的老師帳號設為系統管理員。
+- 新增安全函式 `public.list_teacher_accounts()`，只有系統管理員可列出老師帳號與 Email。
+- 新增安全函式 `public.reset_teacher_temporary_password(target_teacher_id, temporary_password)`，只有系統管理員可重設老師臨時密碼。
+- 新增管理員頁：`app/dashboard/admin/teachers/page.tsx`。
+- 新增管理員重設臨時密碼 action 與 client panel。
+- 臨時密碼採隨機產生，格式類似 `MQ-ABCD-2345-EFGH`，每次重設都不同。
+- 重設後提供 `mailto:` 連結，讓系統管理員用自己的郵件軟體通知老師臨時密碼。
+- 老師被標記 `must_change_password = true` 後，登入老師工作台其他頁面會被強制導向帳號設定頁。
+- 老師在帳號設定頁成功修改密碼後，系統會清除 `must_change_password`。
+- 使用 `npx supabase db push` 成功將 migration 套用到 Supabase 遠端資料庫。
+- 依照本機 build 流程，複製專案到 Windows 暫存目錄後執行 `npm ci` 與 `npm run build`，建置成功。
+
+變更原因：
+
+- 使用者決定不先設定 custom SMTP，而是採用系統管理員重設老師臨時密碼的彈性備援方案。
+- Supabase 內建寄信服務有 2 emails/hour 限制，管理員臨時密碼流程可避免忘記密碼功能完全依賴寄信。
+
+影響檔案：
+
+- `app/dashboard/layout.tsx`
+- `app/dashboard/admin/teachers/page.tsx`
+- `app/dashboard/admin/teachers/actions.ts`
+- `app/dashboard/admin/teachers/ResetPasswordPanel.tsx`
+- `app/dashboard/settings/page.tsx`
+- `app/dashboard/settings/actions.ts`
+- `app/globals.css`
+- `lib/supabase/proxy.ts`
+- `supabase/migrations/20260526090000_add_teacher_admin_password_reset.sql`
+- `supabase-setup.md`
+- `work-log.md`
+
+後續待辦：
+
+- 部署正式網站後，以系統管理員登入測試老師帳號列表與臨時密碼重設流程。
+- 後續若老師數量增加，可補上搜尋、分頁與更完整的管理員操作紀錄。
+
 ### 新增老師帳號設定頁
 
 變更類型：老師端帳號功能

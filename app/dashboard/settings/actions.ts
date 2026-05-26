@@ -96,6 +96,16 @@ export async function updatePassword(formData: FormData) {
     redirect(`/dashboard/settings?error=${encodeURIComponent("更新密碼失敗，請稍後再試")}`);
   }
 
+  const { error: profileError } = await supabase
+    .from("teachers")
+    .update({ must_change_password: false })
+    .eq("id", user.id);
+
+  if (profileError) {
+    redirect(`/dashboard/settings?error=${encodeURIComponent("密碼已更新，但帳號狀態更新失敗")}`);
+  }
+
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/settings");
   redirect("/dashboard/settings?message=密碼已更新");
 }

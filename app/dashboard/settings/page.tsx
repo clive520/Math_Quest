@@ -17,7 +17,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
   const { data: teacher } = await supabase
     .from("teachers")
-    .select("display_name")
+    .select("display_name, must_change_password")
     .eq("id", user?.id)
     .maybeSingle();
 
@@ -32,6 +32,11 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
       {params.error ? <p className="notice error">{params.error}</p> : null}
       {params.message ? <p className="notice success">{params.message}</p> : null}
+      {teacher?.must_change_password ? (
+        <p className="notice warning">
+          你目前使用的是臨時密碼。請先設定自己的新密碼，才能繼續使用老師工作台。
+        </p>
+      ) : null}
 
       <section className="settings-grid" aria-label="帳號設定表單">
         <form className="form management-form" action={updateProfile}>

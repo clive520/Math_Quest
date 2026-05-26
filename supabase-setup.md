@@ -107,6 +107,7 @@ https://math-quest-clive520s-projects.vercel.app
 ```text
 supabase/migrations/20260515021520_initial_core_schema.sql
 supabase/migrations/20260515043000_add_teacher_profile_trigger.sql
+supabase/migrations/20260526090000_add_teacher_admin_password_reset.sql
 ```
 
 第一批資料表：
@@ -132,6 +133,14 @@ supabase/migrations/20260515043000_add_teacher_profile_trigger.sql
 - 老師只能管理自己的班級、學生、派題與私人題目。
 - 老師可以讀取公開題目。
 - 學生端第一版預計透過 Next.js Server Action / API 驗證學生 session 後寫入作答資料，不直接使用 Supabase Auth。
+
+管理員與臨時密碼機制：
+
+- `teachers.is_admin`：標記系統管理員。
+- `teachers.must_change_password`：標記老師是否必須先修改臨時密碼。
+- `public.list_teacher_accounts()`：系統管理員列出老師帳號。
+- `public.reset_teacher_temporary_password(target_teacher_id, temporary_password)`：系統管理員重設老師臨時密碼，並將該老師標記為必須修改密碼。
+- 目前已將 `clive520@lyps.tc.edu.tw` 設為系統管理員。
 
 ## 七、安全原則
 
