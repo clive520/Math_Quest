@@ -656,6 +656,18 @@
 
 ## 2026-05-26
 
+### 修正學生加入班級失敗
+
+問題：學生透過 QR Code 進入 `/join/NRZKTM` 後，送出加入表單會失敗。
+
+原因：`join_class_by_code` 會使用 `gen_salt()`、`crypt()`、`digest()` 進行學生密碼雜湊與 session token 雜湊；Supabase 的 `pgcrypto` 函式在 `extensions` schema，但 RPC 設定了 `search_path = public`，導致正式資料庫執行時找不到 `gen_salt()`。
+
+修正：
+- 新增 migration：`supabase/migrations/20260526143000_fix_student_pgcrypto_schema.sql`。
+- 將學生加入、學生登入、學生 session 查詢函式中的 pgcrypto 呼叫改為 `extensions.crypt`、`extensions.gen_salt`、`extensions.gen_random_bytes`、`extensions.digest`。
+- 已推送 migration 到正式 Supabase。
+- 已用正式 Supabase RPC 測試班級代碼 `NRZKTM`，加入測試學生與讀取學生 session 均成功。
+
 ### 學生用班級代碼自行加入
 
 工作目標：老師建立班級後，系統產生班級代碼與 QR Code；學生掃描後輸入座號、姓名與自訂密碼加入班級。之後學生可用「班級代碼 + 座號 + 密碼」登入。老師可在班級詳情頁編輯或刪除學生資料。

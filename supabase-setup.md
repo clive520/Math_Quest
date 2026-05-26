@@ -185,6 +185,21 @@ http://localhost:3000/auth/callback
 
 ## 2026-05-26 學生加入班級與登入
 
+修正 migration：
+```text
+supabase/migrations/20260526143000_fix_student_pgcrypto_schema.sql
+```
+
+Supabase 的 `pgcrypto` 函式位於 `extensions` schema。學生加入與登入 RPC 需要明確使用：
+```text
+extensions.crypt
+extensions.gen_salt
+extensions.gen_random_bytes
+extensions.digest
+```
+
+如果未明確指定 schema，`security definer` 函式在 `search_path = public` 時會找不到 `gen_salt()`，造成學生加入班級失敗。
+
 新增 migration：
 ```text
 supabase/migrations/20260526100000_add_student_join_sessions.sql
