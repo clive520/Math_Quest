@@ -185,6 +185,22 @@ http://localhost:3000/auth/callback
 
 ## 2026-05-26 學生加入班級與登入
 
+老師更新學生資料與密碼：
+```text
+supabase/migrations/20260526153000_add_teacher_student_update_rpc.sql
+```
+
+新增 RPC：
+```text
+update_student_for_teacher(target_student_id, input_seat_number, input_name, input_password)
+```
+
+用途：
+- 老師可更新自己班級中的學生座號與姓名。
+- `input_password` 為選填；留空時不修改密碼。
+- 若輸入新密碼，資料庫會使用 `extensions.crypt(..., extensions.gen_salt('bf'))` 重新雜湊保存。
+- 函式會檢查學生是否屬於目前登入老師的班級，避免跨班或跨老師修改。
+
 修正 migration：
 ```text
 supabase/migrations/20260526143000_fix_student_pgcrypto_schema.sql

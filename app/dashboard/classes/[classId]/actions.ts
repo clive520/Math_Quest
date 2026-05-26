@@ -13,6 +13,7 @@ export async function updateStudent(formData: FormData) {
   const classId = getFormValue(formData, "class_id");
   const studentId = getFormValue(formData, "student_id");
   const name = getFormValue(formData, "name");
+  const password = getFormValue(formData, "password");
   const seatNumberValue = getFormValue(formData, "seat_number");
   const seatNumber = Number(seatNumberValue);
 
@@ -24,16 +25,17 @@ export async function updateStudent(formData: FormData) {
     redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent("座號必須是大於 0 的整數")}`);
   }
 
+  if (password && password.length < 4) {
+    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent("新密碼至少需要 4 個字元")}`);
+  }
+
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("students")
-    .update({
-      login_code: seatNumber.toString(),
-      name,
-      seat_number: seatNumber,
-    })
-    .eq("id", studentId)
-    .eq("class_id", classId);
+  const { error } = await supabase.rpc("update_student_for_teacher", {
+    input_name: name,
+    input_password: password || null,
+    input_seat_number: seatNumber,
+    target_student_id: studentId,
+  });
 
   if (error) {
     const message = error.code === "23505" ? "這個座號已經有人使用" : "更新學生資料失敗";

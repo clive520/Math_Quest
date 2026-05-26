@@ -440,6 +440,16 @@ h1 {
   margin-bottom: 6px;
 }
 
+.class-title-link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.class-title-link:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
 .class-actions {
   align-items: center;
   display: flex;
@@ -534,21 +544,80 @@ h1 {
   gap: 12px;
 }
 
-.student-row {
-  align-items: end;
+.student-table {
   border: 1px solid var(--line);
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.student-table-header,
+.student-record-summary {
+  align-items: center;
   display: grid;
+  gap: 16px;
+  grid-template-columns: 120px minmax(0, 1fr) auto;
+}
+
+.student-table-header {
+  background: #eef4f3;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 12px 16px;
+}
+
+.student-record + .student-record {
+  border-top: 1px solid var(--line);
+}
+
+.student-record-summary {
+  min-height: 58px;
+  padding: 14px 16px;
+}
+
+.student-record-summary strong {
+  color: var(--accent-strong);
+}
+
+.student-record-actions {
+  align-items: center;
+  display: flex;
   gap: 14px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  padding: 14px;
+}
+
+.student-record-actions details {
+  position: relative;
+}
+
+.student-record-actions summary {
+  color: var(--accent-strong);
+  cursor: pointer;
+  font-weight: 800;
+  list-style: none;
+}
+
+.student-record-actions summary::-webkit-details-marker {
+  display: none;
+}
+
+.student-record-actions details[open] summary {
+  margin-bottom: 12px;
 }
 
 .student-edit-form {
-  align-items: end;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 14px 30px rgba(15, 35, 32, 0.14);
   display: grid;
   gap: 12px;
-  grid-template-columns: minmax(100px, 140px) minmax(180px, 1fr) auto;
+  grid-template-columns: minmax(90px, 120px) minmax(180px, 1fr);
+  min-width: min(520px, 76vw);
+  padding: 16px;
+  position: absolute;
+  right: 0;
+  top: 28px;
+  z-index: 2;
 }
 
 .student-edit-form label {
@@ -583,6 +652,16 @@ h1 {
 
 .student-edit-form button:hover {
   background: var(--accent-strong);
+}
+
+.danger-link {
+  color: #be123c;
+}
+
+.section-actions {
+  align-items: center;
+  display: flex;
+  gap: 16px;
 }
 
 .empty-state {
@@ -709,13 +788,14 @@ h1 {
     padding: 22px 18px;
   }
 
-    .workband,
-    .section-heading,
-    .class-row,
-    .class-actions,
-    .join-card,
-    .teacher-account-row,
-    .status-stack {
+  .workband,
+  .section-heading,
+  .class-row,
+  .class-actions,
+  .join-card,
+  .section-actions,
+  .teacher-account-row,
+  .status-stack {
     align-items: stretch;
     flex-direction: column;
   }
@@ -726,8 +806,26 @@ h1 {
     width: 100%;
   }
 
-  .student-row,
-  .student-edit-form,
+  .student-table-header {
+    display: none;
+  }
+
+  .student-record-summary {
+    align-items: start;
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .student-record-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .student-edit-form {
+    min-width: 0;
+    position: static;
+    width: 100%;
+  }
+
   .teacher-account-row {
     grid-template-columns: 1fr;
   }

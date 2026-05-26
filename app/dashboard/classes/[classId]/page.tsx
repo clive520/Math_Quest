@@ -1,7 +1,5 @@
 import Link from "next/link";
-import QRCode from "qrcode";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { archiveStudent, updateStudent } from "./actions";
 
@@ -15,27 +13,10 @@ type ClassDetailPageProps = {
   }>;
 };
 
-function getSiteUrlFromHeaders(host: string | null, protocol: string | null) {
-  if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
-  }
-
-  if (host) {
-    return `${protocol ?? "https"}://${host}`;
-  }
-
-  return "https://math-quest-clive520s-projects.vercel.app";
-}
-
 export default async function ClassDetailPage({ params, searchParams }: ClassDetailPageProps) {
   const { classId } = await params;
   const query = await searchParams;
   const supabase = await createClient();
-  const headerStore = await headers();
-  const siteUrl = getSiteUrlFromHeaders(
-    headerStore.get("host"),
-    headerStore.get("x-forwarded-proto"),
-  );
 
   const { data: classInfo } = await supabase
     .from("classes")
@@ -50,80 +31,88 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
 
   const { data: students } = await supabase
     .from("students")
-    .select("id, name, seat_number, login_code, created_at")
+    .select("id, name, seat_number, created_at")
     .eq("class_id", classId)
     .eq("archived", false)
     .order("seat_number", { ascending: true });
-
-  const joinUrl = `${siteUrl}/join/${classInfo.class_code}`;
-  const qrCodeDataUrl = await QRCode.toDataURL(joinUrl, {
-    margin: 1,
-    width: 220,
-  });
 
   return (
     <main className="dashboard-content">
       <section className="section-heading">
         <div>
-          <p className="eyebrow">班級管理</p>
+          <p className="eyebrow">學生狀況</p>
           <h2>{classInfo.name}</h2>
           <p className="muted-line">
             {classInfo.grade ? `${classInfo.grade} 年級` : "未設定年級"}
             {classInfo.semester ? ` · ${classInfo.semester}` : ""}
           </p>
         </div>
-        <Link className="text-link" href="/dashboard/classes">
-          返回班級列表
-        </Link>
+        <div className="section-actions">
+          <Link className="text-link" href={`/dashboard/classes/${classInfo.id}/qr`}>
+            學生加入 QR Code
+          </Link>
+          <Link className="text-link" href="/dashboard/classes">
+            返回班級列表
+          </Link>
+        </div>
       </section>
 
       {query.error ? <p className="notice error">{query.error}</p> : null}
       {query.message ? <p className="notice success">{query.message}</p> : null}
 
-      <section className="join-card" aria-label="學生加入資訊">
-        <div>
-          <p className="eyebrow">學生加入班級</p>
-          <h3>班級代碼：{classInfo.class_code}</h3>
-          <p>{joinUrl}</p>
-          <div className="join-actions">
-            <a className="primary-link" href={joinUrl}>
-              開啟加入頁面
-            </a>
-          </div>
-        </div>
-        <img alt={`${classInfo.name} 加入班級 QR Code`} src={qrCodeDataUrl} />
-      </section>
-
       <section className="table-panel" aria-label="學生名單">
         {students && students.length > 0 ? (
-          <div className="student-list">
+          <div className="student-table">
+            <div className="student-table-header" aria-hidden="true">
+              <span>座號</span>
+              <span>姓名</span>
+              <span>操作</span>
+            </div>
             {students.map((student) => (
-              <article className="student-row" key={student.id}>
-                <form className="student-edit-form" action={updateStudent}>
-                  <input name="class_id" type="hidden" value={classInfo.id} />
-                  <input name="student_id" type="hidden" value={student.id} />
-                  <label>
-                    座號
-                    <input
-                      name="seat_number"
-                      required
-                      defaultValue={student.seat_number ?? ""}
-                      inputMode="numeric"
-                    />
-                  </label>
-                  <label>
-                    姓名
-                    <input name="name" required defaultValue={student.name} />
-                  </label>
-                  <button type="submit">儲存</button>
-                </form>
-                <form action={archiveStudent}>
-                  <input name="class_id" type="hidden" value={classInfo.id} />
-                  <input name="student_id" type="hidden" value={student.id} />
-                  <button className="text-button" type="submit">
-                    刪除
-                  </button>
-                </form>
+              <article className="student-record" key={student.id}>
+                <div className="student-record-summary">
+                  <strong>{student.seat_number}</strong>
+                  <span>{student.name}</span>
+                  <div className="student-record-actions">
+                    <details>
+                      <summary>編輯</summary>
+                      <form className="student-edit-form" action={updateStudent}>
+                        <input name="class_id" type="hidden" value={classInfo.id} />
+                        <input name="student_id" type="hidden" value={student.id} />
+                        <label>
+                          座號
+                          <input
+                            name="seat_number"
+                            required
+                            defaultValue={student.seat_number ?? ""}
+                            inputMode="numeric"
+                          />
+                        </label>
+                        <label>
+                          姓名
+                          <input name="name" required defaultValue={student.name} />
+                        </label>
+                        <label>
+                          新密碼
+                          <input
+                            name="password"
+                            type="password"
+                            minLength={4}
+                            placeholder="不修改可留空"
+                          />
+                        </label>
+                        <button type="submit">儲存變更</button>
+                      </form>
+                    </details>
+                    <form action={archiveStudent}>
+                      <input name="class_id" type="hidden" value={classInfo.id} />
+                      <input name="student_id" type="hidden" value={student.id} />
+                      <button className="text-button danger-link" type="submit">
+                        刪除
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </article>
             ))}
           </div>

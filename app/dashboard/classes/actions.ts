@@ -29,11 +29,11 @@ export async function createClass(formData: FormData) {
   const grade = gradeValue ? Number(gradeValue) : null;
 
   if (!name) {
-    redirect("/dashboard/classes?error=請輸入班級名稱");
+    redirect(`/dashboard/classes?error=${encodeURIComponent("請輸入班級名稱")}`);
   }
 
   if (grade !== null && (!Number.isInteger(grade) || grade < 1 || grade > 6)) {
-    redirect("/dashboard/classes?error=年級需介於 1 到 6");
+    redirect(`/dashboard/classes?error=${encodeURIComponent("年級必須介於 1 到 6")}`);
   }
 
   const supabase = await createClient();
@@ -57,7 +57,7 @@ export async function createClass(formData: FormData) {
     if (!error) {
       revalidatePath("/dashboard");
       revalidatePath("/dashboard/classes");
-      redirect("/dashboard/classes?message=班級已建立");
+      redirect(`/dashboard/classes?message=${encodeURIComponent("班級已建立")}`);
     }
 
     if (error.code !== "23505") {
@@ -65,14 +65,14 @@ export async function createClass(formData: FormData) {
     }
   }
 
-  redirect("/dashboard/classes?error=班級代碼產生失敗，請再試一次");
+  redirect(`/dashboard/classes?error=${encodeURIComponent("班級代碼產生失敗，請再試一次")}`);
 }
 
 export async function archiveClass(formData: FormData) {
   const classId = getFormValue(formData, "class_id");
 
   if (!classId) {
-    redirect("/dashboard/classes?error=找不到班級");
+    redirect(`/dashboard/classes?error=${encodeURIComponent("缺少班級資料")}`);
   }
 
   const supabase = await createClient();
@@ -96,5 +96,5 @@ export async function archiveClass(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/classes");
-  redirect("/dashboard/classes?message=班級已封存");
+  redirect(`/dashboard/classes?message=${encodeURIComponent("班級已封存")}`);
 }

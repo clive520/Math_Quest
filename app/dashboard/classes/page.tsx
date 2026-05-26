@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 import { archiveClass, createClass } from "./actions";
 
 type ClassesPageProps = {
@@ -52,7 +52,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
           </label>
           <label>
             學期
-            <input name="semester" placeholder="例如：114 學年度上學期" />
+            <input name="semester" placeholder="例如：114 學年度下學期" />
           </label>
           <button type="submit">建立班級</button>
         </form>
@@ -63,7 +63,11 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
               {classes.map((item) => (
                 <article className="class-row" key={item.id}>
                   <div>
-                    <h3>{item.name}</h3>
+                    <h3>
+                      <Link className="class-title-link" href={`/dashboard/classes/${item.id}`}>
+                        {item.name}
+                      </Link>
+                    </h3>
                     <p>
                       {item.grade ? `${item.grade} 年級` : "未設定年級"}
                       {item.semester ? ` · ${item.semester}` : ""}
@@ -71,8 +75,8 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                   </div>
                   <div className="class-actions">
                     <span className="code-pill">{item.class_code}</span>
-                    <Link className="text-link" href={`/dashboard/classes/${item.id}`}>
-                      學生與 QR Code
+                    <Link className="text-link" href={`/dashboard/classes/${item.id}/qr`}>
+                      學生加入 QR Code
                     </Link>
                     <form action={archiveClass}>
                       <input name="class_id" type="hidden" value={item.id} />
@@ -86,8 +90,8 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
             </div>
           ) : (
             <div className="empty-state">
-              <h3>還沒有班級</h3>
-              <p>先建立第一個班級，接著就能加入學生並指派任務。</p>
+              <h3>目前沒有班級</h3>
+              <p>先建立第一個班級，之後就可以讓學生加入並查看學習狀況。</p>
             </div>
           )}
         </section>

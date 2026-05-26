@@ -656,6 +656,20 @@
 
 ## 2026-05-26
 
+### 調整班級列表與學生管理介面
+
+工作目標：將「查看學生狀況」與「學生加入 QR Code」拆成兩個入口，並讓老師可以在學生名單中修改學生密碼。
+
+已完成：
+- 班級列表中，班級名稱連到學生狀況頁 `/dashboard/classes/[classId]`。
+- 班級列表中的「學生加入 QR Code」連到獨立 QR Code 頁 `/dashboard/classes/[classId]/qr`。
+- 學生狀況頁改為先列出座號、姓名與操作按鈕，不再預設顯示整排編輯表單。
+- 點「編輯」後才展開座號、姓名、新密碼欄位。
+- 新密碼為選填；留空代表不修改密碼，填入時會重新雜湊後更新。
+- 新增 Supabase RPC：`update_student_for_teacher(target_student_id, input_seat_number, input_name, input_password)`。
+- 新增 migration：`supabase/migrations/20260526153000_add_teacher_student_update_rpc.sql`。
+- 已用本機暫存 build 目錄完成 `npm ci` 與 `npm run build` 驗證。
+
 ### 修正學生加入班級失敗
 
 問題：學生透過 QR Code 進入 `/join/NRZKTM` 後，送出加入表單會失敗。
