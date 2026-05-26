@@ -35,6 +35,8 @@
 - 老師在帳號設定頁成功修改密碼後，系統會清除 `must_change_password`。
 - 使用 `npx supabase db push` 成功將 migration 套用到 Supabase 遠端資料庫。
 - 依照本機 build 流程，複製專案到 Windows 暫存目錄後執行 `npm ci` 與 `npm run build`，建置成功。
+- 建立 Git commit：`b67803f Add admin teacher password reset`，並推送到 GitHub `main` 觸發 Vercel 正式部署。
+- 部署後以系統管理員帳號登入正式網站，確認 `/dashboard/admin/teachers` 可顯示「老師帳號管理」、老師 Email 與「重設臨時密碼」按鈕。
 
 變更原因：
 
@@ -57,7 +59,6 @@
 
 後續待辦：
 
-- 部署正式網站後，以系統管理員登入測試老師帳號列表與臨時密碼重設流程。
 - 後續若老師數量增加，可補上搜尋、分頁與更完整的管理員操作紀錄。
 
 ### 新增老師帳號設定頁
