@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 import { archiveClass, createClass } from "./actions";
 
 type ClassesPageProps = {
@@ -70,6 +71,9 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                   </div>
                   <div className="class-actions">
                     <span className="code-pill">{item.class_code}</span>
+                    <Link className="text-link" href={`/dashboard/classes/${item.id}`}>
+                      學生與 QR Code
+                    </Link>
                     <form action={archiveClass}>
                       <input name="class_id" type="hidden" value={item.id} />
                       <button className="text-button" type="submit">

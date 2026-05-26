@@ -182,3 +182,22 @@ http://localhost:3000/auth/callback
 1. Supabase Auth 的 Site URL 是否仍設定為 `http://localhost:3000`。
 2. Supabase Auth 的 Redirect URLs 是否包含正式網站 `/auth/callback` 與 `/auth/callback**`。
 3. Vercel 是否已設定 `NEXT_PUBLIC_SITE_URL=https://math-quest-clive520s-projects.vercel.app` 並重新部署。
+
+## 2026-05-26 學生加入班級與登入
+
+新增 migration：
+```text
+supabase/migrations/20260526100000_add_student_join_sessions.sql
+```
+
+這次新增的資料庫能力：
+- `student_sessions`：保存學生登入 session。實際 token 只存在瀏覽器 cookie，資料庫只保存 SHA-256 雜湊值。
+- `get_class_by_code(input_class_code)`：依班級代碼查詢可加入的班級。
+- `join_class_by_code(input_class_code, input_seat_number, input_name, input_password)`：學生用班級代碼、座號、姓名與自訂密碼加入班級。
+- `login_student_by_class_code(input_class_code, input_seat_number, input_password)`：學生用班級代碼、座號與密碼登入。
+- `get_student_session(session_token)`：由學生 cookie session 取回學生與班級資料。
+
+注意事項：
+- 學生密碼使用 PostgreSQL `crypt(..., gen_salt('bf'))` 保存，不保存明文密碼。
+- 同一班級內座號不可重複；老師可在班級詳情頁編輯座號與姓名，或將學生封存刪除。
+- 這套學生登入不使用 Supabase Auth 寄信，因此不受 Supabase 預設每小時 2 封信的限制。

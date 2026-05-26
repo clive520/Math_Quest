@@ -367,3 +367,21 @@ Region: ap-northeast-1
 ```text
 SSO protection 已關閉，正式網址可公開瀏覽。
 ```
+
+## 2026-05-26 補充：Google Drive 專案的 build 與部署方式
+
+這個專案放在 Google 雲端硬碟同步資料夾內，`node_modules`、`.next` 等大量小檔案在同步磁碟上容易變慢或鎖檔。因此每次正式部署前，採用下列方式驗證：
+
+1. 將原始碼複製到本機暫存 build 目錄。
+2. 在暫存目錄執行 `npm ci`。
+3. 在暫存目錄執行 `npm run build`。
+4. build 成功後，回到 Google Drive 專案原目錄進行 `git status`、commit、push。
+5. GitHub push 後，由 Vercel 自動部署正式網站。
+
+本次學生加入班級功能已用上述方式驗證：
+```text
+npm ci
+npm run build
+```
+
+build 結果：成功。

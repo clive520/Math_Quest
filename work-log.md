@@ -653,3 +653,24 @@
 後續待辦：
 
 - 之後每次新增、修改或刪除重要內容時，都同步更新本工作日誌。
+
+## 2026-05-26
+
+### 學生用班級代碼自行加入
+
+工作目標：老師建立班級後，系統產生班級代碼與 QR Code；學生掃描後輸入座號、姓名與自訂密碼加入班級。之後學生可用「班級代碼 + 座號 + 密碼」登入。老師可在班級詳情頁編輯或刪除學生資料。
+
+已完成：
+- 新增 Supabase migration：`supabase/migrations/20260526100000_add_student_join_sessions.sql`。
+- 新增 `student_sessions`，用雜湊後的 session token 保存學生登入狀態。
+- 新增 RPC：`get_class_by_code`、`join_class_by_code`、`login_student_by_class_code`、`get_student_session`。
+- 新增學生加入頁 `/join/[classCode]`、學生登入頁 `/student-login`、學生首頁 `/student`。
+- 新增老師班級詳情頁 `/dashboard/classes/[classId]`，顯示班級代碼、加入連結、QR Code，以及學生名單管理。
+- 班級列表新增「學生與 QR Code」入口。
+- 新增 `qrcode` 與 `@types/qrcode` 套件。
+- 依照部署流程，先複製到本機暫存 build 目錄後執行 `npm ci` 與 `npm run build`，確認建置成功。
+
+後續待做：
+- 將 migration 推到 Supabase 正式資料庫。
+- commit 並 push 到 GitHub，讓 Vercel 部署正式網站。
+- 部署後驗證 `/student-login`、老師班級詳情頁 QR Code、以及學生加入流程。
