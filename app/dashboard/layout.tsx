@@ -36,40 +36,58 @@ export default async function DashboardLayout({
 
   if (teacher?.must_change_password && !pathname.startsWith("/dashboard/settings")) {
     redirect(
-      `/dashboard/settings?error=${encodeURIComponent(
-        "你目前使用的是臨時密碼，請先修改密碼",
-      )}`,
+      `/dashboard/settings?error=${encodeURIComponent("請先修改密碼，才能繼續使用老師工作台")}`,
     );
   }
 
   return (
-    <div className="dashboard-shell">
-      <aside className="sidebar" aria-label="老師端導覽">
-        <Link className="brand" href="/dashboard">
-          Math Quest
-        </Link>
-        <nav>
-          <Link href="/dashboard">總覽</Link>
-          <Link href="/dashboard/classes">班級</Link>
-          {teacher?.is_admin ? <Link href="/dashboard/admin/teachers">老師帳號</Link> : null}
-          <Link href="/dashboard/settings">帳號設定</Link>
-        </nav>
-        <form action={signOut}>
-          <button className="ghost-button" type="submit">
-            登出
-          </button>
-        </form>
-      </aside>
-
-      <div className="dashboard-main">
-        <header className="topbar">
-          <div>
-            <p className="eyebrow">老師工作台</p>
-            <h1>{teacher?.display_name ?? user.email}</h1>
+    <>
+      <input className="sidebar-toggle-check" id="sidebar-toggle" type="checkbox" />
+      <div className="dashboard-shell">
+        <aside className="sidebar" aria-label="老師工作台導覽">
+          <div className="sidebar-head">
+            <Link className="brand" href="/dashboard">
+              <span className="brand-full">Math Quest</span>
+              <span className="brand-short">MQ</span>
+            </Link>
+            <label className="sidebar-toggle-button" htmlFor="sidebar-toggle">
+              <span className="toggle-open">收合</span>
+              <span className="toggle-closed">展開</span>
+            </label>
           </div>
-        </header>
-        {children}
+          <nav>
+            <Link href="/dashboard">
+              <span className="nav-label">總覽</span>
+            </Link>
+            <Link href="/dashboard/classes">
+              <span className="nav-label">班級</span>
+            </Link>
+            {teacher?.is_admin ? (
+              <Link href="/dashboard/admin/teachers">
+                <span className="nav-label">老師帳號</span>
+              </Link>
+            ) : null}
+            <Link href="/dashboard/settings">
+              <span className="nav-label">帳號設定</span>
+            </Link>
+          </nav>
+          <form action={signOut}>
+            <button className="ghost-button" type="submit">
+              <span className="nav-label">登出</span>
+            </button>
+          </form>
+        </aside>
+
+        <div className="dashboard-main">
+          <header className="topbar">
+            <div>
+              <p className="eyebrow">老師工作台</p>
+              <h1>{teacher?.display_name ?? user.email}</h1>
+            </div>
+          </header>
+          {children}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -31,32 +31,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
       {params.error ? <p className="notice error">{params.error}</p> : null}
       {params.message ? <p className="notice success">{params.message}</p> : null}
 
-      <section className="split-layout">
-        <form className="form management-form" action={createClass}>
-          <h3>新增班級</h3>
-          <label>
-            班級名稱
-            <input name="name" required placeholder="例如：三年甲班" />
-          </label>
-          <label>
-            年級
-            <select name="grade" defaultValue="">
-              <option value="">未設定</option>
-              <option value="1">一年級</option>
-              <option value="2">二年級</option>
-              <option value="3">三年級</option>
-              <option value="4">四年級</option>
-              <option value="5">五年級</option>
-              <option value="6">六年級</option>
-            </select>
-          </label>
-          <label>
-            學期
-            <input name="semester" placeholder="例如：114 學年度下學期" />
-          </label>
-          <button type="submit">建立班級</button>
-        </form>
-
+      <section className="split-layout classes-layout">
         <section className="table-panel" aria-label="班級列表">
           {classes && classes.length > 0 ? (
             <div className="class-list">
@@ -95,6 +70,31 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
             </div>
           )}
         </section>
+
+        <form className="form management-form" action={createClass}>
+          <h3>新增班級</h3>
+          <label>
+            班級名稱
+            <input name="name" required placeholder="例如：三年甲班" />
+          </label>
+          <label>
+            年級
+            <select name="grade" defaultValue="">
+              <option value="">未設定</option>
+              <option value="1">一年級</option>
+              <option value="2">二年級</option>
+              <option value="3">三年級</option>
+              <option value="4">四年級</option>
+              <option value="5">五年級</option>
+              <option value="6">六年級</option>
+            </select>
+          </label>
+          <label>
+            學期
+            <input name="semester" placeholder="例如：114 學年度下學期" />
+          </label>
+          <button type="submit">建立班級</button>
+        </form>
       </section>
     </main>
   );

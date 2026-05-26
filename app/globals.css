@@ -284,6 +284,20 @@ h1 {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
   min-height: 100vh;
+  transition: grid-template-columns 180ms ease;
+}
+
+.sidebar-toggle-check {
+  height: 1px;
+  left: -999px;
+  opacity: 0;
+  position: absolute;
+  top: -999px;
+  width: 1px;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell {
+  grid-template-columns: 88px minmax(0, 1fr);
 }
 
 .sidebar {
@@ -295,10 +309,38 @@ h1 {
   padding: 24px;
 }
 
+.sidebar-head {
+  display: grid;
+  gap: 12px;
+}
+
 .brand {
   font-size: 20px;
   font-weight: 800;
   text-decoration: none;
+}
+
+.brand-short,
+.toggle-closed {
+  display: none;
+}
+
+.sidebar-toggle-button {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  color: #d9fbf5;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 34px;
+  padding: 8px 10px;
+  user-select: none;
+}
+
+.sidebar-toggle-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar nav {
@@ -326,6 +368,54 @@ h1 {
   background: transparent;
   border: 0;
   width: 100%;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar {
+  align-items: stretch;
+  padding: 20px 14px;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .brand-full,
+.sidebar-toggle-check:checked + .dashboard-shell .nav-label,
+.sidebar-toggle-check:checked + .dashboard-shell .toggle-open {
+  display: none;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .brand-short,
+.sidebar-toggle-check:checked + .dashboard-shell .toggle-closed {
+  display: inline;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .brand,
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a,
+.sidebar-toggle-check:checked + .dashboard-shell .ghost-button {
+  text-align: center;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a::before {
+  content: attr(href);
+  display: block;
+  font-size: 0;
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard"]::after {
+  content: "總";
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/classes"]::after {
+  content: "班";
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/admin/teachers"]::after {
+  content: "師";
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/settings"]::after {
+  content: "設";
+}
+
+.sidebar-toggle-check:checked + .dashboard-shell .ghost-button::after {
+  content: "出";
 }
 
 .dashboard-main {
@@ -401,6 +491,10 @@ h1 {
   display: grid;
   gap: 20px;
   grid-template-columns: 360px minmax(0, 1fr);
+}
+
+.classes-layout {
+  grid-template-columns: minmax(0, 1fr) 360px;
 }
 
 .settings-grid {
