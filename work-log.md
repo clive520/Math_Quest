@@ -13,6 +13,39 @@
 - 影響檔案
 - 後續待辦
 
+## 2026-05-29
+
+### 實作數學知識點 (Knowledge Points) 系統
+
+變更類型：功能開發與資料庫重構
+
+變更摘要：
+
+- 新增 migration：`20260529060000_add_knowledge_points.sql`，建立 `knowledge_points` 與 `question_knowledge_points` 資料表，並包含基礎資料與 RLS 安全策略。
+- 更新 API：在 `actions.ts` 加入 `getKnowledgePoints()`，並在題目的 CRUD 中整合知識點寫入與讀取。
+- 前端頁面 (`QuestionForm.tsx`)：加入知識點多選區塊 (Checkbox list)。
+- 前端列表 (`page.tsx`)：在題庫列表的卡片中，將綁定的知識點以膠囊標籤 (Badge) 的形式展示。
+
+變更原因：
+
+- 讓老師出題時能嚴謹歸類所屬知識點（採用方案 A：標準化關聯表），幫助未來的公開分享與學習成效分析。
+
+影響檔案：
+
+- `supabase/migrations/20260529060000_add_knowledge_points.sql`
+- `app/dashboard/questions/actions.ts`
+- `app/dashboard/questions/QuestionForm.tsx`
+- `app/dashboard/questions/page.tsx`
+- `app/dashboard/questions/new/page.tsx`
+- `app/dashboard/questions/[id]/edit/page.tsx`
+- `work-log.md`
+
+後續待辦：
+
+- 將新的 SQL 腳本套用到遠端 Supabase 資料庫。
+- 將程式碼推送到 GitHub 完成正式網站更新。
+- 實作任務指派流程（派題給班級）。
+
 ## 2026-05-28
 
 ### 實作老師出題系統（題目模板建立）

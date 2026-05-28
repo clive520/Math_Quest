@@ -6,9 +6,10 @@ import { createQuestion, updateQuestion } from "./actions";
 
 type QuestionFormProps = {
   initialData?: any;
+  knowledgePoints?: any[];
 };
 
-export default function QuestionForm({ initialData }: QuestionFormProps) {
+export default function QuestionForm({ initialData, knowledgePoints = [] }: QuestionFormProps) {
   const router = useRouter();
   const isEdit = !!initialData;
   const [isPending, setIsPending] = useState(false);
@@ -20,6 +21,10 @@ export default function QuestionForm({ initialData }: QuestionFormProps) {
   
   const [template, setTemplate] = useState(initialData?.template || "{{a}} + {{b}} = ?");
   const [answerRule, setAnswerRule] = useState(initialData?.answer_rule || "a + b");
+  
+  // 記錄已選擇的知識點 ID
+  const defaultSelectedKpIds = initialData?.question_knowledge_points?.map((mapping: any) => mapping.knowledge_points.id) || [];
+  const [selectedKnowledgePoints, setSelectedKnowledgePoints] = useState<string[]>(defaultSelectedKpIds);
   
   // 預覽功能用
   const [previewQuestion, setPreviewQuestion] = useState("");
@@ -45,6 +50,12 @@ export default function QuestionForm({ initialData }: QuestionFormProps) {
         [field]: value
       }
     }));
+  };
+
+  const toggleKnowledgePoint = (id: string) => {
+    setSelectedKnowledgePoints(prev => 
+      prev.includes(id) ? prev.filter(kpId => kpId !== id) : [...prev, id]
+    );
   };
 
   const generatePreview = () => {
@@ -91,6 +102,11 @@ export default function QuestionForm({ initialData }: QuestionFormProps) {
 
     const formData = new FormData(e.currentTarget);
     formData.set("variables", JSON.stringify(variables));
+    
+    // 將選取的知識點 ID 一併加入 formData
+    selectedKnowledgePoints.forEach(id => {
+      formData.append("knowledge_point_ids", id);
+    });
 
     let result;
     if (isEdit) {
@@ -138,6 +154,31 @@ export default function QuestionForm({ initialData }: QuestionFormProps) {
             <option value="short_answer">填空題 (計算題)</option>
             {/* 第一版以四則運算填空題為主，選擇題暫時隱藏或保留 */}
           </select>
+        </div>
+
+        <div className="form-group">
+          <label>知識點 (可多選)</label>
+          <div style={{ fontSize: "0.9rem", color: "var(--color-slate-500)", marginBottom: "8px" }}>
+            為題目綁定對應的知識點，方便未來歸類與成效追蹤。
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", padding: "16px", backgroundColor: "var(--color-slate-50)", borderRadius: "6px", maxHeight: "240px", overflowY: "auto" }}>
+            {knowledgePoints.map(kp => (
+              <label key={kp.id} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontWeight: "normal" }}>
+                <input 
+                  type="checkbox" 
+                  checked={selectedKnowledgePoints.includes(kp.id)}
+                  onChange={() => toggleKnowledgePoint(kp.id)}
+                />
+                <span title={kp.description}>
+                  <strong style={{ color: "var(--color-indigo-700)" }}>{kp.code}</strong> {kp.name}
+                  {kp.grade && <span style={{ marginLeft: "4px", fontSize: "0.8rem", color: "var(--color-slate-400)" }}>(小{kp.grade})</span>}
+                </span>
+              </label>
+            ))}
+            {knowledgePoints.length === 0 && (
+              <span style={{ color: "var(--color-slate-400)" }}>尚未建立任何知識點</span>
+            )}
+          </div>
         </div>
 
         <div className="form-group">

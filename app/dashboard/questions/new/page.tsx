@@ -1,11 +1,14 @@
 import QuestionForm from "../QuestionForm";
 import Link from "next/link";
+import { getKnowledgePoints } from "../actions";
 
 export const metadata = {
   title: "新增題目 | Math Quest",
 };
 
-export default function NewQuestionPage() {
+export default async function NewQuestionPage() {
+  const knowledgePoints = await getKnowledgePoints();
+
   return (
     <div>
       <div style={{ marginBottom: "24px" }}>
@@ -18,7 +21,7 @@ export default function NewQuestionPage() {
         </p>
       </div>
 
-      <QuestionForm />
+      <QuestionForm knowledgePoints={knowledgePoints} />
     </div>
   );
 }

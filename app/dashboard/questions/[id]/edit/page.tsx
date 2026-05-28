@@ -1,6 +1,6 @@
 import QuestionForm from "../../QuestionForm";
 import Link from "next/link";
-import { getQuestion } from "../../actions";
+import { getQuestion, getKnowledgePoints } from "../../actions";
 import { notFound } from "next/navigation";
 
 export const metadata = {
@@ -9,8 +9,10 @@ export const metadata = {
 
 export default async function EditQuestionPage({ params }: { params: { id: string } }) {
   let question;
+  let knowledgePoints;
   try {
     question = await getQuestion(params.id);
+    knowledgePoints = await getKnowledgePoints();
   } catch (error) {
     notFound();
   }
@@ -28,7 +30,7 @@ export default async function EditQuestionPage({ params }: { params: { id: strin
         <h2>編輯動態題目</h2>
       </div>
 
-      <QuestionForm initialData={question} />
+      <QuestionForm initialData={question} knowledgePoints={knowledgePoints} />
     </div>
   );
 }

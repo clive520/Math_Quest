@@ -45,6 +45,23 @@ export default async function QuestionsPage() {
                     {q.visibility === 'public' ? '公開' : '私人'}
                   </span>
                 </div>
+                {q.question_knowledge_points && q.question_knowledge_points.length > 0 && (
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "8px" }}>
+                    {q.question_knowledge_points.map((mapping: any) => (
+                      <span key={mapping.knowledge_points.id} style={{
+                        padding: "2px 8px",
+                        backgroundColor: "var(--color-teal-50)",
+                        color: "var(--color-teal-700)",
+                        borderRadius: "12px",
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        border: "1px solid var(--color-teal-200)"
+                      }}>
+                        {mapping.knowledge_points.code}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
                 <Link href={`/dashboard/questions/${q.id}/edit`} className="button secondary">
