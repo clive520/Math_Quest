@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { LayoutDashboard, Users, BookOpen, Settings, LogOut, ShieldCheck } from "lucide-react";
 
 async function signOut() {
   "use server";
@@ -57,25 +58,31 @@ export default async function DashboardLayout({
           </div>
           <nav>
             <Link href="/dashboard">
+              <LayoutDashboard size={20} className="nav-icon" />
               <span className="nav-label">總覽</span>
             </Link>
             <Link href="/dashboard/classes">
+              <Users size={20} className="nav-icon" />
               <span className="nav-label">班級</span>
             </Link>
             <Link href="/dashboard/questions">
+              <BookOpen size={20} className="nav-icon" />
               <span className="nav-label">我的題庫</span>
             </Link>
             {teacher?.is_admin ? (
               <Link href="/dashboard/admin/teachers">
+                <ShieldCheck size={20} className="nav-icon" />
                 <span className="nav-label">老師帳號</span>
               </Link>
             ) : null}
             <Link href="/dashboard/settings">
+              <Settings size={20} className="nav-icon" />
               <span className="nav-label">帳號設定</span>
             </Link>
           </nav>
           <form action={signOut}>
-            <button className="ghost-button" type="submit">
+            <button className="ghost-button" type="submit" style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", justifyContent: "flex-start" }}>
+              <LogOut size={20} className="nav-icon" />
               <span className="nav-label">登出</span>
             </button>
           </form>

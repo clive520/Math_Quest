@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getQuestions } from "./actions";
 import DeleteButton from "./DeleteButton";
+import { Plus } from "lucide-react";
 
 export const metadata = {
   title: "我的題庫 | Math Quest",
@@ -13,7 +14,8 @@ export default async function QuestionsPage() {
     <div className="card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <h2>我的題庫</h2>
-        <Link href="/dashboard/questions/new" className="button">
+        <Link href="/dashboard/questions/new" className="button" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <Plus size={18} />
           新增題目
         </Link>
       </div>

@@ -350,6 +350,9 @@ h1 {
 
 .sidebar nav a,
 .ghost-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   border-radius: 8px;
   color: #d9fbf5;
   font-weight: 700;
@@ -390,32 +393,7 @@ h1 {
 .sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a,
 .sidebar-toggle-check:checked + .dashboard-shell .ghost-button {
   text-align: center;
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a::before {
-  content: attr(href);
-  display: block;
-  font-size: 0;
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard"]::after {
-  content: "總";
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/classes"]::after {
-  content: "班";
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/admin/teachers"]::after {
-  content: "師";
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .sidebar nav a[href="/dashboard/settings"]::after {
-  content: "設";
-}
-
-.sidebar-toggle-check:checked + .dashboard-shell .ghost-button::after {
-  content: "出";
+  justify-content: center;
 }
 
 .dashboard-main {
