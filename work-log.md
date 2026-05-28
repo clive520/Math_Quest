@@ -13,6 +13,42 @@
 - 影響檔案
 - 後續待辦
 
+## 2026-05-28
+
+### 實作老師出題系統（題目模板建立）
+
+變更類型：功能開發
+
+變更摘要：
+
+- 實作了取得、建立、更新、刪除題目模板的 Server Actions (`app/dashboard/questions/actions.ts`)。
+- 建立我的題庫列表頁面 (`app/dashboard/questions/page.tsx`)，支援顯示題型與題目可見度。
+- 建立新增題目頁面 (`app/dashboard/questions/new/page.tsx`) 與編輯題目頁面 (`app/dashboard/questions/[id]/edit/page.tsx`)。
+- 建立 `QuestionForm` 表單元件，包含題目變數設定與隨機預覽功能，讓老師可以即時看到動態數字產生的結果。
+- 建立 `DeleteButton` 元件處理刪除前的使用者確認。
+- 於左側老師工作台導覽 (`app/dashboard/layout.tsx`) 中加入「我的題庫」連結。
+- 已用本機暫存 build 目錄腳本 `build-test.ps1` 完成 `npm ci` 與 `npm run build` 驗證。
+
+變更原因：
+
+- 接續 MVP 第一階段的進度，讓老師可以開始建立動態數字的數學題目，以供未來指派任務使用。
+
+影響檔案：
+
+- `app/dashboard/layout.tsx`
+- `app/dashboard/questions/page.tsx`
+- `app/dashboard/questions/actions.ts`
+- `app/dashboard/questions/QuestionForm.tsx`
+- `app/dashboard/questions/DeleteButton.tsx`
+- `app/dashboard/questions/new/page.tsx`
+- `app/dashboard/questions/[id]/edit/page.tsx`
+- `work-log.md`
+
+後續待辦：
+
+- 實作任務指派流程（派題給班級）。
+- 將程式碼推送到 GitHub 完成正式網站更新。
+
 ## 2026-05-15
 
 ### 新增系統管理員重設老師臨時密碼功能

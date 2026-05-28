@@ -62,6 +62,9 @@ export default async function DashboardLayout({
             <Link href="/dashboard/classes">
               <span className="nav-label">班級</span>
             </Link>
+            <Link href="/dashboard/questions">
+              <span className="nav-label">我的題庫</span>
+            </Link>
             {teacher?.is_admin ? (
               <Link href="/dashboard/admin/teachers">
                 <span className="nav-label">老師帳號</span>
