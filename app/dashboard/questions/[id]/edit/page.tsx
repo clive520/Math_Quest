@@ -7,11 +7,12 @@ export const metadata = {
   title: "編輯題目 | Math Quest",
 };
 
-export default async function EditQuestionPage({ params }: { params: { id: string } }) {
+export default async function EditQuestionPage({ params }: { params: Promise<{ id: string }> }) {
   let question;
   let knowledgePoints;
   try {
-    question = await getQuestion(params.id);
+    const resolvedParams = await params;
+    question = await getQuestion(resolvedParams.id);
     knowledgePoints = await getKnowledgePoints();
   } catch (error) {
     notFound();
