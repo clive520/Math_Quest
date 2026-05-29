@@ -16,7 +16,10 @@ export default function QuestionForm({ initialData, knowledgePoints = [] }: Ques
   const [errorMsg, setErrorMsg] = useState("");
 
   const [variables, setVariables] = useState<Record<string, { min: number, max: number }>>(
-    initialData?.variables || {}
+    initialData?.variables || {
+      a: { min: 1, max: 100 },
+      b: { min: 1, max: 100 }
+    }
   );
   
   const [template, setTemplate] = useState(initialData?.template || "{{a}} + {{b}} = ?");
