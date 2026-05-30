@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getPublicTeachers } from "./t/actions";
+import { ArrowRight, BookOpen, Brain, Trophy, Users } from "lucide-react";
+import { getPublicTeachers } from "./t/data";
 
 export default async function Home() {
   const teachers = await getPublicTeachers();

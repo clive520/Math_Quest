@@ -1,18 +1,20 @@
-import { getTeacherBySlug, getPublicClasses } from "../actions";
+import { getTeacherBySlug, getPublicClasses } from "../data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Users } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const teacher = await getTeacherBySlug(resolvedParams.slug);
-  if (!teacher) return { title: "找不到老師 | Math Quest" };
-  return { title: `${teacher.display_name} 的班級 | Math Quest` };
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const teacher = await getTeacherBySlug(slug);
+  if (!teacher) return { title: "找不到頁面 | Math Quest" };
+  return { title: `${teacher.display_name} 的專屬入口 | Math Quest` };
 }
 
 export default async function TeacherPortalPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const teacher = await getTeacherBySlug(resolvedParams.slug);
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const teacher = await getTeacherBySlug(slug);
   
   if (!teacher) {
     notFound();

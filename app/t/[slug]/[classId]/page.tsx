@@ -1,4 +1,4 @@
-import { getTeacherBySlug, getPublicStudents } from "../../actions";
+import { getTeacherBySlug, getPublicStudents } from "../../data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import StudentLoginGrid from "../../StudentLoginGrid";
@@ -6,14 +6,16 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; classId: string }> }) {
   const resolvedParams = await params;
-  const teacher = await getTeacherBySlug(resolvedParams.slug);
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const teacher = await getTeacherBySlug(slug);
   if (!teacher) return { title: "找不到頁面 | Math Quest" };
   return { title: `班級登入 - ${teacher.display_name} | Math Quest` };
 }
 
 export default async function ClassLoginPage({ params }: { params: Promise<{ slug: string; classId: string }> }) {
   const resolvedParams = await params;
-  const teacher = await getTeacherBySlug(resolvedParams.slug);
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const teacher = await getTeacherBySlug(slug);
   
   if (!teacher) {
     notFound();
