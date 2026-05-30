@@ -4,21 +4,17 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function studentLoginWithPassword(studentId: string, passwordHash: string) {
+export async function studentLoginWithPassword(studentId: string, passwordPlain: string) {
   const supabase = await createClient();
 
-  // Validate password
-  const { data: student, error } = await supabase
-    .from("students")
-    .select("id, password_hash, class_id")
-    .eq("id", studentId)
-    .single();
+  // Validate password using RPC (handles bcrypt)
+  const { data: classId, error } = await supabase
+    .rpc("verify_student_password", {
+      target_student_id: studentId,
+      input_password: passwordPlain,
+    });
 
-  if (error || !student) {
-    return { error: "找不到該學生" };
-  }
-
-  if (student.password_hash !== passwordHash) {
+  if (error || !classId) {
     return { error: "密碼錯誤，請再試一次" };
   }
 
@@ -28,7 +24,7 @@ export async function studentLoginWithPassword(studentId: string, passwordHash: 
     .update({ last_login_at: new Date().toISOString() })
     .eq("id", studentId);
 
-  // Set auth cookie for student (simulated auth since students aren't true auth.users)
+  // Set auth cookie for student
   const cookieStore = await cookies();
   cookieStore.set("student_id", studentId, {
     httpOnly: true,
@@ -37,7 +33,7 @@ export async function studentLoginWithPassword(studentId: string, passwordHash: 
     path: "/",
   });
   
-  cookieStore.set("class_id", student.class_id, {
+  cookieStore.set("class_id", classId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 30,
