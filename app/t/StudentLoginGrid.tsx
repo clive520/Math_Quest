@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { studentLoginWithPassword } from "../../actions";
+import { studentLoginWithPassword } from "./actions";
 
 type Student = {
   id: string;
