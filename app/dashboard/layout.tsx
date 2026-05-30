@@ -69,6 +69,11 @@ export default async function DashboardLayout({
               <BookOpen size={20} className="nav-icon" />
               <span className="nav-label">我的題庫</span>
             </Link>
+            
+            <Link href="/dashboard/assignments">
+              <FileText size={20} className="nav-icon" />
+              <span className="nav-label">任務管理</span>
+            </Link>
             {teacher?.is_admin ? (
               <Link href="/dashboard/admin/teachers">
                 <ShieldCheck size={20} className="nav-icon" />
