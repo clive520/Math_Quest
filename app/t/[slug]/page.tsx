@@ -42,7 +42,7 @@ export default async function TeacherPortalPage({ params }: { params: Promise<{ 
                 href={`/t/${teacher.portal_slug}/${cls.id}`}
                 style={{ textDecoration: "none" }}
               >
-                <div className="card" style={{ 
+                <div className="card hover:border-indigo-500" style={{ 
                   display: "flex", 
                   alignItems: "center", 
                   gap: "16px", 
@@ -50,10 +50,7 @@ export default async function TeacherPortalPage({ params }: { params: Promise<{ 
                   transition: "all 0.2s ease",
                   cursor: "pointer",
                   border: "2px solid transparent"
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--color-indigo-500)"}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = "transparent"}
-                >
+                }}>
                   <div style={{ 
                     width: "48px", 
                     height: "48px", 
