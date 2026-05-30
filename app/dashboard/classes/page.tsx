@@ -13,6 +13,15 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const params = await searchParams;
   const supabase = await createClient();
 
+  const { data: userResponse } = await supabase.auth.getUser();
+  const userId = userResponse?.user?.id;
+  
+  let teacherProfile = null;
+  if (userId) {
+    const { data } = await supabase.from("teachers").select("portal_slug").eq("id", userId).single();
+    teacherProfile = data;
+  }
+
   const { data: classes } = await supabase
     .from("classes")
     .select("id, name, grade, semester, class_code, created_at")
@@ -27,6 +36,19 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
           <h2>建立與查看班級</h2>
         </div>
       </section>
+
+      {teacherProfile?.portal_slug && (
+        <section className="panel" style={{ marginBottom: "24px", padding: "16px", backgroundColor: "var(--color-indigo-50)", border: "1px solid var(--color-indigo-200)", borderRadius: "8px" }}>
+          <h3 style={{ margin: "0 0 8px 0", color: "var(--color-indigo-900)" }}>🔗 您的專屬學生登入入口</h3>
+          <p style={{ margin: 0, color: "var(--color-slate-700)" }}>
+            請將此網址提供給學生，他們不需記住班級代碼即可登入：
+            <br />
+            <a href={`/t/${teacherProfile.portal_slug}`} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: "8px", fontWeight: "bold", color: "var(--color-indigo-700)" }}>
+              /t/{teacherProfile.portal_slug}
+            </a>
+          </p>
+        </section>
+      )}
 
       {params.error ? <p className="notice error">{params.error}</p> : null}
       {params.message ? <p className="notice success">{params.message}</p> : null}

@@ -1,38 +1,52 @@
 import Link from "next/link";
+import { getPublicTeachers } from "./t/actions";
 
-const milestones = [
-  "老師建立班級與管理學生名單",
-  "學生用班級代碼與座號登入",
-  "題目、任務與學習紀錄逐步擴充",
-  "Vercel + Supabase 正式網站部署",
-];
+export default async function Home() {
+  const teachers = await getPublicTeachers();
 
-export default function Home() {
   return (
     <main className="shell">
       <section className="intro" aria-labelledby="site-title">
         <p className="eyebrow">Math Quest</p>
         <h1 id="site-title">讓數學練習變成可以前進的任務</h1>
         <p className="lead">
-          老師可以建立班級、管理學生資料，學生則透過班級代碼加入班級並登入。接下來會把題目任務、闖關紀錄和學習回饋逐步接上。
+          為國小數學設計的互動闖關平台，結合動態變數出題與教育部數學指標，幫助學生更有效地學習。
         </p>
         <div className="hero-actions">
           <Link className="primary-link" href="/login">
-            老師登入
-          </Link>
-          <Link className="secondary-link" href="/student-login">
-            學生登入
+            老師登入/註冊
           </Link>
         </div>
       </section>
 
-      <section className="panel" aria-label="目前進度">
-        {milestones.map((item) => (
-          <div className="item" key={item}>
-            <span aria-hidden="true" />
-            <p>{item}</p>
+      <section className="panel" aria-label="學生登入入口">
+        <h2 style={{ marginBottom: "16px", color: "var(--color-slate-800)" }}>選擇老師專屬登入入口</h2>
+        {teachers.length === 0 ? (
+          <p style={{ color: "var(--color-slate-500)" }}>目前尚未有老師建立專屬入口。</p>
+        ) : (
+          <div style={{ display: "grid", gap: "12px", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}>
+            {teachers.map(teacher => (
+              <Link 
+                key={teacher.id} 
+                href={`/t/${teacher.portal_slug}`}
+                style={{
+                  display: "block",
+                  padding: "16px",
+                  backgroundColor: "white",
+                  border: "1px solid var(--color-slate-200)",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  color: "var(--color-indigo-700)",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                {teacher.display_name} 的班級
+              </Link>
+            ))}
           </div>
-        ))}
+        )}
       </section>
     </main>
   );
