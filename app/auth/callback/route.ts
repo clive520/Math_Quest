@@ -67,7 +67,8 @@ export async function GET(request: NextRequest) {
       });
 
       if (createError || !newUser.user) {
-        return NextResponse.redirect(new URL("/login?error=Failed+to+create+account", request.url));
+        const errorMsg = createError ? createError.message : "No user returned";
+        return NextResponse.redirect(new URL("/login?error=Failed+to+create+account:+" + encodeURIComponent(errorMsg), request.url));
       }
 
       await supabaseAdmin.from("teachers").upsert({
