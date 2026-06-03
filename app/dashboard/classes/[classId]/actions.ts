@@ -68,3 +68,40 @@ export async function archiveStudent(formData: FormData) {
   revalidatePath(`/dashboard/classes/${classId}`);
   redirect(`/dashboard/classes/${classId}?message=${encodeURIComponent("學生已刪除")}`);
 }
+
+export async function addStudent(formData: FormData) {
+  const classId = getFormValue(formData, "class_id");
+  const name = getFormValue(formData, "name");
+  const seatNumberValue = getFormValue(formData, "seat_number");
+  const username = getFormValue(formData, "username"); // SSO username
+  const seatNumber = Number(seatNumberValue);
+
+  if (!classId || !name || !seatNumberValue || !username) {
+    redirect(`/dashboard/classes/${classId || ""}?error=${encodeURIComponent("請完整填寫學生資料")}`);
+  }
+
+  if (!Number.isInteger(seatNumber) || seatNumber <= 0) {
+    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent("座號必須是大於 0 的整數")}`);
+  }
+
+  const supabase = await createClient();
+  
+  // Create login_code as a fallback
+  const loginCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+  const { error } = await supabase.from("students").insert({
+    class_id: classId,
+    name,
+    seat_number: seatNumber,
+    username,
+    login_code: loginCode,
+  });
+
+  if (error) {
+    const message = error.code === "23505" ? "座號或學號 (SSO 帳號) 已重複" : "新增學生失敗";
+    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent(message)}`);
+  }
+
+  revalidatePath(`/dashboard/classes/${classId}`);
+  redirect(`/dashboard/classes/${classId}?message=${encodeURIComponent("成功新增學生")}`);
+}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { archiveStudent, updateStudent } from "./actions";
+import { addStudent, archiveStudent, updateStudent } from "./actions";
 
 type ClassDetailPageProps = {
   params: Promise<{
@@ -59,6 +59,26 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
 
       {query.error ? <p className="notice error">{query.error}</p> : null}
       {query.message ? <p className="notice success">{query.message}</p> : null}
+
+      <section className="form-panel" style={{ marginBottom: '2rem' }}>
+        <h3>新增學生 (SSO 綁定)</h3>
+        <form className="inline-form" action={addStudent} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <input name="class_id" type="hidden" value={classInfo.id} />
+          <label>
+            座號
+            <input name="seat_number" type="number" min="1" required style={{ width: '80px' }} />
+          </label>
+          <label>
+            姓名
+            <input name="name" required style={{ width: '120px' }} />
+          </label>
+          <label>
+            SSO 學號
+            <input name="username" required placeholder="如：test025" style={{ width: '150px' }} />
+          </label>
+          <button type="submit">加入班級</button>
+        </form>
+      </section>
 
       <section className="table-panel" aria-label="學生名單">
         {students && students.length > 0 ? (
