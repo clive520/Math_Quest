@@ -43,7 +43,7 @@ export default async function StudentPage() {
       ) : (
         <section style={{ display: "grid", gap: "16px" }}>
           <h2 style={{ fontSize: "1.25rem", color: "var(--color-slate-700)", marginBottom: "8px" }}>🚀 你的任務列表</h2>
-          {assignments.map((assignment) => (
+          {assignments.map((assignment: any) => (
             <div key={assignment.assignment_id} className="card hover:border-indigo-500" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", transition: "all 0.2s" }}>
               <div>
                 <h3 style={{ fontSize: "1.25rem", margin: "0 0 8px 0", color: "var(--color-slate-800)" }}>{assignment.title}</h3>
