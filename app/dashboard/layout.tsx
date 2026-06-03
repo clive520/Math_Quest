@@ -2,7 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { LayoutDashboard, Users, BookOpen, Settings, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Settings, LogOut, ShieldCheck, FileText } from "lucide-react";
 
 async function signOut() {
   "use server";
