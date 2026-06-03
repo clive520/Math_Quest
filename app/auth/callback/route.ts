@@ -87,9 +87,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/login?error=Sign+in+failed", request.url));
     }
 
-    // Always sync the teacher's display name from SSO
-    // (REMOVED: so teachers can edit their display name locally)
+    // Smartly sync the teacher's display name from SSO:
+    // Only overwrite if the SSO actually provided a real name (not just the UID again)
     const { data: { user } } = await supabaseServer.auth.getUser();
+    if (user && name && name !== uid) {
+      await supabaseAdmin.from("teachers").update({ display_name: name }).eq("id", user.id);
+    }
 
     return NextResponse.redirect(new URL("/dashboard", request.url));
 
