@@ -51,7 +51,7 @@ export default async function SelectSeatPage({ params, searchParams }: Props) {
           <p style={{ margin: 0, color: "var(--color-slate-500)", fontWeight: 600 }}>確認加入班級</p>
           <h1 style={{ fontSize: "2rem", margin: "4px 0", color: "var(--color-indigo-900)" }}>{classInfo.name}</h1>
           <p style={{ margin: 0, color: "var(--color-slate-500)" }}>
-            老師：{classInfo.teachers?.display_name || "未知"}
+            老師：{(classInfo.teachers as any)?.display_name || (Array.isArray(classInfo.teachers) ? classInfo.teachers[0]?.display_name : "未知")}
           </p>
         </div>
       </section>
