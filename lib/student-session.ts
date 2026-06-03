@@ -47,3 +47,26 @@ export async function getStudentSession() {
     student_name: string;
   };
 }
+
+export const STUDENT_SSO_SESSION_COOKIE = "student_sso_session";
+
+export async function getStudentSsoSession() {
+  const cookieStore = await cookies();
+  const sessionString = cookieStore.get(STUDENT_SSO_SESSION_COOKIE)?.value;
+  if (!sessionString) return null;
+  
+  try {
+    return JSON.parse(sessionString) as {
+      sso_uid: string;
+      username: string;
+      name: string;
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function clearStudentSsoSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete(STUDENT_SSO_SESSION_COOKIE);
+}

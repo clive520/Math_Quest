@@ -69,39 +69,25 @@ export async function archiveStudent(formData: FormData) {
   redirect(`/dashboard/classes/${classId}?message=${encodeURIComponent("學生已刪除")}`);
 }
 
-export async function addStudent(formData: FormData) {
+export async function unlinkStudent(formData: FormData) {
   const classId = getFormValue(formData, "class_id");
-  const name = getFormValue(formData, "name");
-  const seatNumberValue = getFormValue(formData, "seat_number");
-  const username = getFormValue(formData, "username"); // SSO username
-  const seatNumber = Number(seatNumberValue);
+  const studentId = getFormValue(formData, "student_id");
 
-  if (!classId || !name || !seatNumberValue || !username) {
-    redirect(`/dashboard/classes/${classId || ""}?error=${encodeURIComponent("請完整填寫學生資料")}`);
-  }
-
-  if (!Number.isInteger(seatNumber) || seatNumber <= 0) {
-    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent("座號必須是大於 0 的整數")}`);
+  if (!classId || !studentId) {
+    redirect(`/dashboard/classes/${classId || ""}?error=${encodeURIComponent("缺少學生資料")}`);
   }
 
   const supabase = await createClient();
-  
-  // Create login_code as a fallback
-  const loginCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-  const { error } = await supabase.from("students").insert({
-    class_id: classId,
-    name,
-    seat_number: seatNumber,
-    username,
-    login_code: loginCode,
-  });
+  const { error } = await supabase
+    .from("students")
+    .update({ sso_uid: null, username: null, name: '未註冊' })
+    .eq("id", studentId)
+    .eq("class_id", classId);
 
   if (error) {
-    const message = error.code === "23505" ? "座號或學號 (SSO 帳號) 已重複" : "新增學生失敗";
-    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent(message)}`);
+    redirect(`/dashboard/classes/${classId}?error=${encodeURIComponent("解除綁定失敗")}`);
   }
 
   revalidatePath(`/dashboard/classes/${classId}`);
-  redirect(`/dashboard/classes/${classId}?message=${encodeURIComponent("成功新增學生")}`);
+  redirect(`/dashboard/classes/${classId}?message=${encodeURIComponent("已解除綁定，座號已空出")}`);
 }

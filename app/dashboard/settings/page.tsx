@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { updatePassword, updateProfile } from "./actions";
 
 type SettingsPageProps = {
   searchParams: Promise<{
@@ -32,47 +31,22 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
       {params.error ? <p className="notice error">{params.error}</p> : null}
       {params.message ? <p className="notice success">{params.message}</p> : null}
-      {teacher?.must_change_password ? (
-        <p className="notice warning">
-          你目前使用的是臨時密碼。請先設定自己的新密碼，才能繼續使用老師工作台。
-        </p>
-      ) : null}
-
-      <section className="settings-grid" aria-label="帳號設定表單">
-        <form className="form management-form" action={updateProfile}>
-          <h3>基本資料</h3>
+      <section className="settings-grid" aria-label="帳號設定表單" style={{ gridTemplateColumns: '1fr', maxWidth: '600px' }}>
+        <div className="form management-form">
+          <h3>基本資料 (由單一認證系統提供)</h3>
           <label>
-            登入 Email
-            <input value={user?.email ?? ""} disabled readOnly />
+            登入 SSO ID
+            <input value={user?.email?.split('@')[0] ?? ""} disabled readOnly />
           </label>
           <label>
             顯示名稱
             <input
               name="display_name"
-              required
+              disabled readOnly
               defaultValue={teacher?.display_name ?? ""}
-              placeholder="例如：高老師"
             />
           </label>
-          <button type="submit">儲存老師資料</button>
-        </form>
-
-        <form className="form management-form" action={updatePassword}>
-          <h3>修改密碼</h3>
-          <label>
-            目前密碼
-            <input name="current_password" type="password" required />
-          </label>
-          <label>
-            新密碼
-            <input name="new_password" type="password" required minLength={6} />
-          </label>
-          <label>
-            再輸入一次新密碼
-            <input name="confirm_password" type="password" required minLength={6} />
-          </label>
-          <button type="submit">更新密碼</button>
-        </form>
+        </div>
       </section>
     </main>
   );

@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
 
       await supabaseAdmin.from("teachers").upsert({
         id: newUser.user.id,
-        name: name,
+        display_name: name,
         sso_uid: uid,
       });
 
@@ -87,58 +87,33 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/login?error=Sign+in+failed", request.url));
     }
 
+    // Always sync the teacher's display name from SSO
+    const { data: { user } } = await supabaseServer.auth.getUser();
+    if (user) {
+      await supabaseAdmin.from("teachers").update({ display_name: name }).eq("id", user.id);
+    }
+
     return NextResponse.redirect(new URL("/dashboard", request.url));
 
   } else if (role === "student") {
-    // ==== STUDENT LOGIN LOGIC (Custom Cookie mapping) ====
-    const supabaseAdmin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-    );
-
-    let { data: student } = await supabaseAdmin
-      .from("students")
-      .select("id, class_id, seat_number, name, login_code, classes(name)")
-      .eq("sso_uid", uid)
-      .single();
-
-    if (!student) {
-      const { data: matchedStudent } = await supabaseAdmin
-        .from("students")
-        .select("id, class_id, seat_number, name, login_code, classes(name)")
-        .eq("username", username)
-        .single();
-
-      if (matchedStudent) {
-        await supabaseAdmin
-          .from("students")
-          .update({ sso_uid: uid })
-          .eq("id", matchedStudent.id);
-        
-        student = matchedStudent;
-      } else {
-        return NextResponse.redirect(new URL(`/login?error=Student+record+not+found.+(Tried+username:+${username})`, request.url));
-      }
-    }
-
-    const studentSessionData = {
-      student_id: student.id,
-      student_name: student.name,
-      class_id: student.class_id,
-      class_name: (student.classes as any)?.name || "未知班級",
-      seat_number: student.seat_number,
-      class_code: "sso-login",
+    // ==== STUDENT LOGIN LOGIC (Global SSO Session) ====
+    // We no longer log them into a specific class here. We store their SSO identity 
+    // and let them choose or join a class on the /student/classes page.
+    const studentSsoSession = {
+      sso_uid: uid,
+      username: username,
+      name: name,
     };
 
     const cookieStore = await cookies();
-    cookieStore.set("student_session", JSON.stringify(studentSessionData), {
+    cookieStore.set("student_sso_session", JSON.stringify(studentSsoSession), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
-    return NextResponse.redirect(new URL("/student", request.url));
+    return NextResponse.redirect(new URL("/student/classes", request.url));
   } else {
     return NextResponse.redirect(new URL("/login?error=Unknown+role", request.url));
   }

@@ -28,11 +28,9 @@ export default async function StudentPage() {
             {student.class_name} · {student.seat_number} 號
           </p>
         </div>
-        <form action={signOutStudent}>
-          <button className="button secondary" type="submit">
-            登出
-          </button>
-        </form>
+        <Link href="/student/classes" className="button secondary">
+          切換班級
+        </Link>
       </section>
 
       {!assignments || assignments.length === 0 ? (

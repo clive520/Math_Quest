@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { addStudent, archiveStudent, updateStudent } from "./actions";
+import { archiveStudent, updateStudent, unlinkStudent } from "./actions";
 
 type ClassDetailPageProps = {
   params: Promise<{
@@ -31,7 +31,7 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
 
   const { data: students } = await supabase
     .from("students")
-    .select("id, name, seat_number, created_at")
+    .select("id, name, seat_number, username, sso_uid, created_at")
     .eq("class_id", classId)
     .eq("archived", false)
     .order("seat_number", { ascending: true });
@@ -60,25 +60,7 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
       {query.error ? <p className="notice error">{query.error}</p> : null}
       {query.message ? <p className="notice success">{query.message}</p> : null}
 
-      <section className="form-panel" style={{ marginBottom: '2rem' }}>
-        <h3>新增學生 (SSO 綁定)</h3>
-        <form className="inline-form" action={addStudent} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <input name="class_id" type="hidden" value={classInfo.id} />
-          <label>
-            座號
-            <input name="seat_number" type="number" min="1" required style={{ width: '80px' }} />
-          </label>
-          <label>
-            姓名
-            <input name="name" required style={{ width: '120px' }} />
-          </label>
-          <label>
-            SSO 學號
-            <input name="username" required placeholder="如：test025" style={{ width: '150px' }} />
-          </label>
-          <button type="submit">加入班級</button>
-        </form>
-      </section>
+
 
       <section className="table-panel" aria-label="學生名單">
         {students && students.length > 0 ? (
@@ -92,7 +74,7 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
               <article className="student-record" key={student.id}>
                 <div className="student-record-summary">
                   <strong>{student.seat_number}</strong>
-                  <span>{student.name}</span>
+                  <span>{student.name} {student.username ? <small style={{color: 'var(--color-indigo-600)'}}>(SSO: {student.username})</small> : <small style={{color: 'var(--color-slate-400)'}}>(尚未綁定)</small>}</span>
                   <div className="student-record-actions">
                     <details>
                       <summary>編輯</summary>
@@ -108,22 +90,18 @@ export default async function ClassDetailPage({ params, searchParams }: ClassDet
                             inputMode="numeric"
                           />
                         </label>
-                        <label>
-                          姓名
-                          <input name="name" required defaultValue={student.name} />
-                        </label>
-                        <label>
-                          新密碼
-                          <input
-                            name="password"
-                            type="password"
-                            minLength={4}
-                            placeholder="不修改可留空"
-                          />
-                        </label>
                         <button type="submit">儲存變更</button>
                       </form>
                     </details>
+                    {student.sso_uid && (
+                      <form action={unlinkStudent}>
+                        <input name="class_id" type="hidden" value={classInfo.id} />
+                        <input name="student_id" type="hidden" value={student.id} />
+                        <button className="text-button" type="submit">
+                          解除綁定
+                        </button>
+                      </form>
+                    )}
                     <form action={archiveStudent}>
                       <input name="class_id" type="hidden" value={classInfo.id} />
                       <input name="student_id" type="hidden" value={student.id} />

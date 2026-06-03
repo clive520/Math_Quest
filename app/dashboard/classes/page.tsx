@@ -115,6 +115,10 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
             學期
             <input name="semester" placeholder="例如：114 學年度下學期" />
           </label>
+          <label>
+            預計學生人數
+            <input name="studentCount" type="number" required min="1" max="100" defaultValue="30" />
+          </label>
           <button type="submit">建立班級</button>
         </form>
       </section>
