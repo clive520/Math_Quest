@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { updateProfile } from "./actions";
 
 type SettingsPageProps = {
   searchParams: Promise<{
@@ -32,8 +33,8 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
       {params.error ? <p className="notice error">{params.error}</p> : null}
       {params.message ? <p className="notice success">{params.message}</p> : null}
       <section className="settings-grid" aria-label="帳號設定表單" style={{ gridTemplateColumns: '1fr', maxWidth: '600px' }}>
-        <div className="form management-form">
-          <h3>基本資料 (由單一認證系統提供)</h3>
+        <form className="form management-form" action={updateProfile}>
+          <h3>基本資料</h3>
           <label>
             登入 SSO ID
             <input value={user?.email?.split('@')[0] ?? ""} disabled readOnly />
@@ -42,11 +43,13 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
             顯示名稱
             <input
               name="display_name"
-              disabled readOnly
+              required
               defaultValue={teacher?.display_name ?? ""}
+              placeholder="例如：高老師"
             />
           </label>
-        </div>
+          <button type="submit">儲存修改</button>
+        </form>
       </section>
     </main>
   );

@@ -54,6 +54,6 @@ export async function bindSeat(formData: FormData) {
     redirect("/student/classes?message=成功加入班級，請重新進入");
   }
 
-  await setStudentSession(sessionData.session_token);
+  await setStudentSession((sessionData as { session_token: string }).session_token);
   redirect("/student");
 }

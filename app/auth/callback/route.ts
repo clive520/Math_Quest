@@ -88,10 +88,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Always sync the teacher's display name from SSO
+    // (REMOVED: so teachers can edit their display name locally)
     const { data: { user } } = await supabaseServer.auth.getUser();
-    if (user) {
-      await supabaseAdmin.from("teachers").update({ display_name: name }).eq("id", user.id);
-    }
 
     return NextResponse.redirect(new URL("/dashboard", request.url));
 

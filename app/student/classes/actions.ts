@@ -34,6 +34,6 @@ export async function enterClass(formData: FormData) {
     redirect("/student/classes?error=SessionCreationError");
   }
 
-  await setStudentSession(data.session_token);
+  await setStudentSession((data as { session_token: string }).session_token);
   redirect("/student");
 }
