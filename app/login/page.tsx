@@ -1,79 +1,59 @@
-import Link from "next/link";
-import { signIn, signUp } from "./actions";
+"use client";
 
-type LoginPageProps = {
-  searchParams: Promise<{
-    error?: string;
-    message?: string;
-    mode?: string;
-  }>;
-};
+import { useEffect, useState } from "react";
+import { LogIn } from "lucide-react";
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const params = await searchParams;
-  const isSignup = params.mode === "signup";
+export default function LoginPage() {
+  const [returnUrl, setReturnUrl] = useState("");
+
+  useEffect(() => {
+    // Generate the callback URL based on the current origin
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    setReturnUrl(`${origin}/auth/callback`);
+  }, []);
+
+  const handleSSOLogin = () => {
+    if (!returnUrl) return;
+    const ssoUrl = `https://sso-auth-system.web.app/?return_url=${encodeURIComponent(returnUrl)}`;
+    window.location.href = ssoUrl;
+  };
 
   return (
-    <main className="auth-shell">
-      <section className="auth-intro" aria-labelledby="login-title">
-        <p className="eyebrow">Math Quest</p>
-        <h1 id="login-title">老師工作台</h1>
-        <p className="lead">
-          登入後可以建立班級、管理學生，並開始準備第一批數學闖關任務。
-        </p>
-        <Link className="text-link" href="/">
-          回首頁
-        </Link>
-      </section>
-
-      <section className="auth-panel" aria-label="老師登入與註冊">
-        {params.error ? <p className="notice error">{params.error}</p> : null}
-        {params.message ? <p className="notice success">{params.message}</p> : null}
-
-        <div className="tabs" aria-label="登入模式">
-          <Link className={!isSignup ? "active" : ""} href="/login">
-            登入
-          </Link>
-          <Link className={isSignup ? "active" : ""} href="/login?mode=signup">
-            註冊
-          </Link>
+    <div className="shell" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>
+      <div className="card" style={{ maxWidth: "450px", width: "100%", padding: "40px 32px", textAlign: "center" }}>
+        <div style={{ marginBottom: "32px" }}>
+          <h1 style={{ fontSize: "2rem", color: "var(--color-indigo-900)", marginBottom: "8px" }}>Math Quest</h1>
+          <p style={{ color: "var(--color-slate-500)", fontSize: "1.1rem" }}>數學闖關任務系統</p>
         </div>
 
-        {isSignup ? (
-          <form className="form" action={signUp}>
-            <label>
-              顯示名稱
-              <input name="display_name" placeholder="例如：高老師" />
-            </label>
-            <label>
-              Email
-              <input name="email" type="email" required placeholder="teacher@example.com" />
-            </label>
-            <label>
-              密碼
-              <input name="password" type="password" required minLength={6} />
-            </label>
-            <button type="submit">建立老師帳號</button>
-          </form>
-        ) : (
-          <form className="form" action={signIn}>
-            <label>
-              Email
-              <input name="email" type="email" required placeholder="teacher@example.com" />
-            </label>
-            <label>
-              密碼
-              <input name="password" type="password" required />
-            </label>
-            <button type="submit">登入老師工作台</button>
-            <div className="form-footer">
-              <Link className="text-link" href="/forgot-password">
-                忘記密碼？
-              </Link>
-            </div>
-          </form>
-        )}
-      </section>
-    </main>
+        <div style={{ backgroundColor: "var(--color-slate-50)", padding: "24px", borderRadius: "12px", marginBottom: "32px", border: "1px solid var(--color-slate-200)" }}>
+          <h2 style={{ fontSize: "1.25rem", marginBottom: "16px", color: "var(--color-slate-800)" }}>系統登入</h2>
+          <p style={{ color: "var(--color-slate-600)", marginBottom: "24px", fontSize: "0.95rem", lineHeight: 1.5 }}>
+            本系統已整合「鹿陽國小單一認證系統」。<br/>請點擊下方按鈕進行登入。
+          </p>
+          
+          <button 
+            onClick={handleSSOLogin}
+            className="button primary" 
+            style={{ 
+              width: "100%", 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center", 
+              gap: "12px",
+              padding: "16px",
+              fontSize: "1.1rem"
+            }}
+          >
+            <LogIn size={20} />
+            <span>前往單一認證系統 (SSO) 登入</span>
+          </button>
+        </div>
+
+        <p style={{ fontSize: "0.85rem", color: "var(--color-slate-400)" }}>
+          如果您遇到登入問題，請聯繫系統管理員。
+        </p>
+      </div>
+    </div>
   );
 }
