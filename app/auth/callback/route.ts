@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
         
         student = matchedStudent;
       } else {
-        return NextResponse.redirect(new URL("/login?error=Student+record+not+found.+Please+ask+your+teacher+to+add+you.", request.url));
+        return NextResponse.redirect(new URL(`/login?error=Student+record+not+found.+(Tried+username:+${username})`, request.url));
       }
     }
 
