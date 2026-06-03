@@ -64,6 +64,7 @@ export async function GET(request: NextRequest) {
         email,
         password: internalPassword,
         email_confirm: true,
+        user_metadata: { display_name: name },
       });
 
       if (createError || !newUser.user) {
@@ -71,11 +72,12 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL("/login?error=Failed+to+create+account:+" + encodeURIComponent(errorMsg), request.url));
       }
 
-      await supabaseAdmin.from("teachers").upsert({
-        id: newUser.user.id,
+      // The trigger handle_new_teacher_user has already created the teacher row.
+      // We just need to update sso_uid and ensure display_name is correct.
+      await supabaseAdmin.from("teachers").update({
         display_name: name,
         sso_uid: uid,
-      });
+      }).eq("id", newUser.user.id);
 
       authResponse = await supabaseServer.auth.signInWithPassword({
         email,
@@ -89,9 +91,9 @@ export async function GET(request: NextRequest) {
 
     // Smartly sync the teacher's display name from SSO:
     // Only overwrite if the SSO actually provided a real name (not just the UID again)
-    const { data: { user } } = await supabaseServer.auth.getUser();
-    if (user && name && name !== uid) {
-      await supabaseAdmin.from("teachers").update({ display_name: name }).eq("id", user.id);
+    const loggedInUser = authResponse.data.user;
+    if (loggedInUser && name && name !== uid) {
+      await supabaseAdmin.from("teachers").update({ display_name: name }).eq("id", loggedInUser.id);
     }
 
     return NextResponse.redirect(new URL("/dashboard", request.url));
