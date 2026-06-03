@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       const { data: matchedStudent } = await supabaseAdmin
         .from("students")
         .select("id, class_id, seat_number, name, login_code, classes(name)")
-        .eq("login_code", username)
+        .eq("username", username)
         .single();
 
       if (matchedStudent) {
